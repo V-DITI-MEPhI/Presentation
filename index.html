@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Платформа обработки данных</title>
+  <link rel="icon" type="image/png"
+    href="https://image.qwenlm.ai/public_source/a7e887e8-e4ca-4c2a-b5f1-feec1fcb0496/1d7438b03-1685-437b-9869-1c2b02c6ba0f.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,121 +36,950 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <style>
-    html { scroll-behavior: smooth; }
-    html, body { overflow-x: hidden; max-width: 100vw; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
-    .btn-interactive { transition: all 0.2s ease-out; }
-    .btn-interactive:hover { transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-    .btn-interactive:active { transform: scale(0.95); }
-    .card-interactive { transition: all 0.3s ease-out; border: 1px solid transparent; }
-    .card-interactive:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); filter: brightness(0.98); }
-    .card-interactive:hover { border-color: hsl(210, 75%, 40%); }
-    .dark .card-interactive:hover { filter: brightness(1.05); border-color: hsl(210, 75%, 60%); }
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .btn-interactive {
+      transition: all 0.2s ease-out;
+    }
+
+    .btn-interactive:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-interactive:active {
+      transform: scale(0.95);
+    }
+
+    .card-interactive {
+      transition: all 0.3s ease-out;
+      border: 1px solid transparent;
+    }
+
+    .card-interactive:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      filter: brightness(0.98);
+    }
+
+    .card-interactive:hover {
+      border-color: hsl(210, 75%, 40%);
+    }
+
+    .dark .card-interactive:hover {
+      filter: brightness(1.05);
+      border-color: hsl(210, 75%, 60%);
+    }
+
+    .card-interactive.bg-purple-50\50:hover,
+    .card-interactive:has(.bg-purple-500):hover {
+      border-color: rgba(168, 85, 247, 0.4) !important;
+      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.25);
+    }
+
+    .dark .card-interactive.bg-purple-50\50:hover,
+    .dark .card-interactive:has(.bg-purple-500):hover {
+      border-color: rgba(192, 132, 252, 0.5) !important;
+      box-shadow: 0 8px 20px rgba(192, 132, 252, 0.35);
+    }
+
+    /* Сжатие (оранжевый/amber) */
+    .card-interactive.bg-amber-50\50:hover,
+    .card-interactive:has(.bg-amber-500):hover {
+      border-color: rgba(245, 158, 11, 0.4) !important;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
+    }
+
+    .dark .card-interactive.bg-amber-50\50:hover,
+    .dark .card-interactive:has(.bg-amber-500):hover {
+      border-color: rgba(251, 191, 36, 0.5) !important;
+      box-shadow: 0 8px 20px rgba(251, 191, 36, 0.35);
+    }
+
+    /* Параметры α, β, γ - сделаем светлее в тёмной теме */
+    .text-xs.text-gray-500 {
+      color: #6b7280;
+    }
+
+    .dark .text-xs.text-gray-500 {
+      color: #9ca3af;
+    }
+
+    /* ===== СЛАЙД 7: Фикс стрелок ===== */
+    .relative.group>.hidden.md\\:block {
+      z-index: 20;
+    }
+
+    /* Улучшим позиционирование стрелок */
+    .relative.group {
+      position: relative;
+    }
+
+    .relative.group .absolute.top-1\2 {
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    /* Адаптация для маленьких экранов */
+    @media (max-width: 768px) {
+      .relative.group>.hidden.md\\:block {
+        display: none !important;
+      }
+    }
+
+    .card-interactive.red-card:hover {
+      border-color: hsl(0, 70%, 50%) !important;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+    }
+
+    .dark .card-interactive.red-card:hover {
+      border-color: hsl(0, 70%, 60%) !important;
+      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.3);
+    }
+
+    .card-interactive.green-card:hover {
+      border-color: hsl(142, 71%, 35%) !important;
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.2);
+    }
+
+    .dark .card-interactive.green-card:hover {
+      border-color: hsl(142, 71%, 45%) !important;
+      box-shadow: 0 8px 20px rgba(74, 222, 128, 0.3);
+    }
 
     .side-nav-container {
-      position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 40;
-      background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 12px 0; max-height: 80vh; overflow-y: auto;
-      border: 1px solid rgba(0,0,0,0.05);
+      position: fixed;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 8px 0;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
-    .dark .side-nav-container { background: rgba(31,41,55,0.95); border-color: rgba(255,255,255,0.05); }
+
+    .dark .side-nav-container {
+      background: rgba(31, 41, 55, 0.95);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
     .side-nav-item {
-      padding: 8px 14px; cursor: pointer; transition: all 0.2s ease; font-size: 12px;
-      color: #6b7280; border-left: 3px solid transparent; display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 11px;
+      color: #6b7280;
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .dark .side-nav-item { color: #9ca3af; }
-    .side-nav-item:hover { background: rgba(0,0,0,0.03); color: #1f2937; border-left-color: #3b82f6; }
-    .dark .side-nav-item:hover { background: rgba(255,255,255,0.05); color: #f3f4f6; }
-    .side-nav-item.active { background: rgba(59,130,246,0.1); color: #2563eb; border-left-color: #2563eb; font-weight: 600; }
-    .dark .side-nav-item.active { background: rgba(59,130,246,0.2); color: #60a5fa; border-left-color: #60a5fa; }
-    .side-nav-item i { width: 14px; height: 14px; opacity: 0.7; }
-    .side-nav-item.active i, .side-nav-item:hover i { opacity: 1; }
-    .side-nav-container::-webkit-scrollbar { width: 4px; }
-    .side-nav-container::-webkit-scrollbar-track { background: transparent; }
-    .side-nav-container::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 2px; }
-    .dark .side-nav-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
-    @media (max-width: 1024px) { .side-nav-container { display: none; } }
 
-    .floating-controls { position: fixed; top: 16px; right: 16px; z-index: 50; display: flex; gap: 8px; }
+    .dark .side-nav-item {
+      color: #9ca3af;
+    }
+
+    .side-nav-item:hover {
+      background: rgba(0, 0, 0, 0.03);
+      color: #1f2937;
+      border-left-color: #3b82f6;
+    }
+
+    .dark .side-nav-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #f3f4f6;
+    }
+
+    .side-nav-item.active {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border-left-color: #2563eb;
+      font-weight: 600;
+    }
+
+    .dark .side-nav-item.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border-left-color: #60a5fa;
+    }
+
+    .side-nav-item i {
+      width: 14px;
+      height: 14px;
+      opacity: 0.7;
+    }
+
+    .side-nav-item.active i,
+    .side-nav-item:hover i {
+      opacity: 1;
+    }
+
+    .side-nav-container::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .side-nav-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .side-nav-container::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+
+    @media (max-width: 1024px) {
+      .side-nav-container {
+        display: none;
+      }
+    }
+
+    .floating-controls {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      display: flex;
+      gap: 8px;
+    }
+
     .floating-btn {
-      padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.1);
-      color: #374151; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .dark .floating-btn { background: rgba(31,41,55,0.95); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
-    .floating-btn:hover { transform: scale(1.05); background: rgba(59,130,246,0.1); border-color: #3b82f6; }
-    .floating-btn i { width: 18px; height: 18px; }
 
-    body.presentation-blank { background: #000 !important; }
-    body.presentation-blank main, body.presentation-blank footer, body.presentation-blank .side-nav-container, body.presentation-blank .floating-controls { visibility: hidden !important; }
-    body.presentation-blank::after { content: ''; position: fixed; inset: 0; background: #000; z-index: 9999; }
-    body.presentation-blank::before { content: 'Нажмите B или . для выхода'; position: fixed; bottom: 24px; right: 24px; color: rgba(255,255,255,0.4); font-size: 13px; z-index: 10000; visibility: visible !important; }
-    body.presentation-white { background: #fff !important; }
-    body.presentation-white main, body.presentation-white footer, body.presentation-white .side-nav-container, body.presentation-white .floating-controls { visibility: hidden !important; }
-    body.presentation-white::after { content: ''; position: fixed; inset: 0; background: #fff; z-index: 9999; }
-    body.presentation-white::before { content: 'Нажмите W или / для выхода'; position: fixed; bottom: 24px; right: 24px; color: rgba(0,0,0,0.4); font-size: 13px; z-index: 10000; visibility: visible !important; }
+    .dark .floating-btn {
+      background: rgba(31, 41, 55, 0.95);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+    }
 
-    #progressBar { position: fixed; top: 0; left: 0; height: 3px; background: #3b82f6; z-index: 60; transition: width 0.15s ease-out; }
-    .dark #progressBar { background: #60a5fa; }
-    section[id] { scroll-margin-top: 100px; scroll-snap-align: start; }
-    :fullscreen, ::-webkit-full-screen { overflow-x: hidden; width: 100%; }
+    .floating-btn:hover {
+      transform: scale(1.05);
+      background: rgba(59, 130, 246, 0.1);
+      border-color: #3b82f6;
+    }
+
+    .floating-btn i {
+      width: 18px;
+      height: 18px;
+    }
+
+    body.presentation-blank {
+      background: #000 !important;
+    }
+
+    body.presentation-blank main,
+    body.presentation-blank footer,
+    body.presentation-blank .side-nav-container,
+    body.presentation-blank .floating-controls {
+      visibility: hidden !important;
+    }
+
+    body.presentation-blank::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+    }
+
+    body.presentation-blank::before {
+      content: 'Нажмите B или . для выхода';
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 13px;
+      z-index: 10000;
+      visibility: visible !important;
+    }
+
+    body.presentation-white {
+      background: #fff !important;
+    }
+
+    body.presentation-white main,
+    body.presentation-white footer,
+    body.presentation-white .side-nav-container,
+    body.presentation-white .floating-controls {
+      visibility: hidden !important;
+    }
+
+    body.presentation-white::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      z-index: 9999;
+    }
+
+    body.presentation-white::before {
+      content: 'Нажмите W или / для выхода';
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      color: rgba(0, 0, 0, 0.4);
+      font-size: 13px;
+      z-index: 10000;
+      visibility: visible !important;
+    }
+
+    #progressBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #3b82f6;
+      z-index: 60;
+      transition: width 0.15s ease-out;
+    }
+
+    .dark #progressBar {
+      background: #60a5fa;
+    }
+
+    section[id] {
+      scroll-margin-top: 20px;
+      scroll-snap-align: start;
+    }
+
+    :fullscreen,
+    ::-webkit-full-screen {
+      overflow-x: hidden;
+      width: 100%;
+    }
 
     .slide-badge {
-      display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
-      border-radius: 20px; font-size: 12px; font-weight: 600;
-      background: rgba(59,130,246,0.1); color: #2563eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
     }
-    .dark .slide-badge { background: rgba(59,130,246,0.2); color: #60a5fa; }
 
-    .tech-logo-row { display: flex; gap: 24px; align-items: center; justify-content: center; opacity: 0.6; flex-wrap: wrap; }
-    .tech-logo-row span { font-weight: 700; font-size: 14px; color: #9ca3af; display: flex; align-items: center; gap: 6px; }
-
-    .formula-display {
-      font-family: 'Courier New', monospace; font-size: 16px; padding: 14px 20px;
-      background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.15);
-      border-radius: 8px; text-align: center; margin: 12px 0; line-height: 1.6;
+    .dark .slide-badge {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
     }
-    .dark .formula-display { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.25); }
-
-    .speaker-notes-toggle {
-      position: fixed; bottom: 16px; left: 16px; z-index: 50;
-      padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.95);
-      border: 1px solid rgba(0,0,0,0.1); color: #374151; cursor: pointer;
-      font-size: 13px; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
-    }
-    .dark .speaker-notes-toggle { background: rgba(31,41,55,0.95); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
-    .speaker-notes-toggle:hover { background: rgba(59,130,246,0.1); }
-
-    .speaker-notes {
-      position: fixed; bottom: 56px; left: 16px; z-index: 49;
-      max-width: 400px; padding: 16px 20px; border-radius: 12px;
-      background: rgba(255,255,255,0.98); border: 1px solid rgba(0,0,0,0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-size: 13px; line-height: 1.6;
-      display: none; color: #374151;
-    }
-    .dark .speaker-notes { background: rgba(31,41,55,0.98); border-color: rgba(255,255,255,0.1); color: #e5e7eb; }
-    .speaker-notes.visible { display: block; }
-
-    .results-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
-    .results-table th {
-      padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600;
-      background: rgba(59,130,246,0.1); color: #2563eb; border-bottom: 2px solid rgba(59,130,246,0.2);
-    }
-    .dark .results-table th { background: rgba(59,130,246,0.2); color: #60a5fa; }
-    .results-table td { padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.06); }
-    .dark .results-table td { border-bottom-color: rgba(255,255,255,0.06); }
-    .results-table tr:last-child td { border-bottom: none; }
-    .results-table tr:hover td { background: rgba(59,130,246,0.03); }
-    .dark .results-table tr:hover td { background: rgba(59,130,246,0.05); }
 
     .keyword-tag {
-      display: inline-block; padding: 3px 10px; border-radius: 12px;
-      font-size: 12px; background: rgba(59,130,246,0.08); color: #2563eb;
-      border: 1px solid rgba(59,130,246,0.15); margin: 2px;
+      display: inline-flex;
+      align-items: flex-start;
+      padding: 2px 10px 4px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      background: rgba(74, 140, 248, 0.08);
+      color: #1f5bdc;
+      border: 1px solid rgba(74, 140, 248, 0.08);
+      margin: 2px;
     }
-    .dark .keyword-tag { background: rgba(59,130,246,0.15); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
 
-    .ref-list { font-size: 12px; line-height: 1.7; }
-    .ref-list li { margin-bottom: 6px; padding-left: 4px; }
+    .dark .keyword-tag {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-color: rgba(59, 130, 246, 0.25);
+    }
+
+    .ref-list {
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .ref-list li {
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+
+    .speaker-notes-toggle {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      z-index: 50;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #374151;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .dark .speaker-notes-toggle {
+      background: rgba(31, 41, 55, 0.95);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+    }
+
+    .speaker-notes-toggle:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .speaker-notes {
+      position: fixed;
+      bottom: 56px;
+      left: 16px;
+      z-index: 49;
+      max-width: 520px;
+      max-height: 55vh;
+      overflow-y: auto;
+      padding: 20px 24px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      font-size: 14px;
+      line-height: 1.7;
+      display: none;
+      color: #374151;
+    }
+
+    .dark .speaker-notes {
+      background: rgba(31, 41, 55, 0.98);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+    }
+
+    .speaker-notes.visible {
+      display: block;
+    }
+
+    .speaker-notes::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .speaker-notes::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+
+    .qr-code-wrapper {
+      position: relative;
+      display: inline-block;
+      padding: 16px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14);
+      border: 2px solid rgba(50, 108, 229, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .qr-code-wrapper:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .qr-code-wrapper img {
+      display: block;
+      width: 170px;
+      height: 170px;
+      image-rendering: crisp-edges;
+    }
+
+    .qr-pulse {
+      position: absolute;
+      inset: -4px;
+      border-radius: 24px;
+      border: 2px solid rgba(50, 108, 229, 0.3);
+      animation: qrPulseAnim 2.5s ease-in-out infinite;
+    }
+
+    @keyframes qrPulseAnim {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.03);
+      }
+    }
+
+    .qr-label {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .dark .qr-label {
+      color: #94a3b8;
+    }
+
+    .k8s-diagram {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .k8s-cluster-border {
+      border: 2px dashed #326ce5;
+      background: rgba(50, 108, 229, 0.04);
+      border-radius: 16px;
+      padding: 24px 16px 16px;
+      position: relative;
+    }
+
+    .dark .k8s-cluster-border {
+      background: rgba(50, 108, 229, 0.08);
+      border-color: rgba(50, 108, 229, 0.5);
+    }
+
+    .k8s-layer-label {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      padding: 2px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: white;
+    }
+
+    .k8s-master-node {
+      background: linear-gradient(135deg, #326ce5 0%, #1e40af 100%);
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+    }
+
+    .k8s-worker-node {
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .dark .k8s-worker-node {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .k8s-component {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .k8s-pod {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f8fafc;
+      transition: all 0.25s ease;
+    }
+
+    .dark .k8s-pod {
+      background: #0f172a;
+      border-color: #334155;
+    }
+
+    .k8s-pod:hover {
+      border-color: #326ce5;
+      background: rgba(50, 108, 229, 0.06);
+    }
+
+    .dark .k8s-pod:hover {
+      background: rgba(50, 108, 229, 0.1);
+    }
+
+    .k8s-layer {
+      position: relative;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    #infoPanel {
+      transition: all 0.3s ease;
+    }
+
+    #infoPanel.hidden {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    #infoPanel:not(.hidden) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .anim-fade-up {
+      animation: fadeSlideUp 0.6s ease-out both;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .anim-delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .anim-delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .anim-delay-3 {
+      animation-delay: 0.3s;
+    }
+
+    .anim-delay-4 {
+      animation-delay: 0.4s;
+    }
+
+    .formula-display {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 14px 20px;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 8px;
+      text-align: center;
+      margin: 12px 0;
+      line-height: 1.6;
+    }
+
+    .dark .formula-display {
+      color: #e2e8f0;
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .formula-display sub,
+    .formula-display sup {
+      color: inherit;
+    }
+
+    .dark .formula-display sub,
+    .dark .formula-display sup {
+      color: #94a3b8;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+
+    .results-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .dark .results-table th {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .results-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .dark .results-table td {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .results-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .results-table tr:hover td {
+      background: rgba(59, 130, 246, 0.03);
+    }
+
+    .dark .results-table tr:hover td {
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .tech-logo-row {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      flex-wrap: wrap;
+    }
+
+    .tech-logo-row span {
+      font-weight: 700;
+      font-size: 14px;
+      color: #393e46;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dark .tech-logo-row span {
+      color: #e2e8f0;
+    }
+
+    .dark .tech-logo-row span i {
+      color: #94a3b8;
+    }
+
+    .related-card {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .dark .related-card {
+      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(31, 41, 55, 0.6);
+    }
+
+    .related-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .related-card .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .ref-card {
+      border-left: 3px solid #3b82f6;
+      background: rgba(59, 130, 246, 0.04);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      transition: all 0.25s ease;
+      cursor: default;
+    }
+
+    .dark .ref-card {
+      background: rgba(59, 130, 246, 0.08);
+      border-left-color: #60a5fa;
+    }
+
+    .ref-card:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: translateX(4px);
+    }
+
+    .dark .ref-card:hover {
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .ref-card .ref-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #3b82f6;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .dark .ref-card .ref-num {
+      background: #60a5fa;
+      color: #1e293b;
+    }
+
+    .ref-card .ref-title {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .ref-card .ref-detail {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .dark .ref-card .ref-detail {
+      color: #9ca3af;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .dark .modal-content {
+      background: #1e293b;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      padding: 24px 24px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .modal-body {
+      padding: 20px 24px 24px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+
+    .dark .modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      color: #9ca3af;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+      color: #1f2937;
+    }
+
+    .dark .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #f3f4f6;
+    }
+
+    .modal-source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .modal-source-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-source-link i {
+      width: 18px;
+      height: 18px;
+    }
   </style>
 </head>
 
@@ -172,25 +1003,42 @@
   <div id="speakerNotes" class="speaker-notes"></div>
 
   <nav class="side-nav-container">
-    <a href="#slide-1" class="side-nav-item active" data-section="slide-1"><i data-lucide="presentation"></i><span>Титульный</span></a>
-    <a href="#slide-2" class="side-nav-item" data-section="slide-2"><i data-lucide="file-text"></i><span>Аннотация</span></a>
-    <a href="#slide-3" class="side-nav-item" data-section="slide-3"><i data-lucide="book-open"></i><span>Введение</span></a>
-    <a href="#slide-4" class="side-nav-item" data-section="slide-4"><i data-lucide="sigma"></i><span>Формализация</span></a>
-    <a href="#slide-5" class="side-nav-item" data-section="slide-5"><i data-lucide="target"></i><span>Целевая функция</span></a>
-    <a href="#slide-6" class="side-nav-item" data-section="slide-6"><i data-lucide="pentagon"></i><span>Симплекс</span></a>
-    <a href="#slide-7" class="side-nav-item" data-section="slide-7"><i data-lucide="git-branch"></i><span>Алгоритм</span></a>
-    <a href="#slide-8" class="side-nav-item" data-section="slide-8"><i data-lucide="layers"></i><span>Архитектура</span></a>
-    <a href="#slide-9" class="side-nav-item" data-section="slide-9"><i data-lucide="boxes"></i><span>Развёртывание</span></a>
-    <a href="#slide-10" class="side-nav-item" data-section="slide-10"><i data-lucide="table"></i><span>Результаты</span></a>
-    <a href="#slide-11" class="side-nav-item" data-section="slide-11"><i data-lucide="zap"></i><span>Скорость</span></a>
-    <a href="#slide-12" class="side-nav-item" data-section="slide-12"><i data-lucide="memory-stick"></i><span>ОЗУ</span></a>
-    <a href="#slide-13" class="side-nav-item" data-section="slide-13"><i data-lucide="shield-check"></i><span>Точность</span></a>
-    <a href="#slide-14" class="side-nav-item" data-section="slide-14"><i data-lucide="bar-chart-3"></i><span>Анализ</span></a>
-    <a href="#slide-15" class="side-nav-item" data-section="slide-15"><i data-lucide="list"></i><span>Источники</span></a>
-    <a href="#slide-16" class="side-nav-item" data-section="slide-16"><i data-lucide="check-circle"></i><span>Заключение</span></a>
+    <a href="#slide-1" class="side-nav-item active" data-section="slide-1"><i
+        data-lucide="presentation"></i><span>Титульный</span></a>
+    <a href="#slide-2" class="side-nav-item" data-section="slide-2"><i
+        data-lucide="file-text"></i><span>Аннотация</span></a>
+    <a href="#slide-3" class="side-nav-item" data-section="slide-3"><i
+        data-lucide="book-open"></i><span>Введение</span></a>
+    <a href="#slide-4" class="side-nav-item" data-section="slide-4"><i
+        data-lucide="sigma"></i><span>Формализация</span></a>
+    <a href="#slide-5" class="side-nav-item" data-section="slide-5"><i data-lucide="target"></i><span>Целевая
+        функция</span></a>
+    <a href="#slide-6" class="side-nav-item" data-section="slide-6"><i
+        data-lucide="git-branch"></i><span>Алгоритм</span></a>
+    <a href="#slide-7" class="side-nav-item" data-section="slide-7"><i
+        data-lucide="layers"></i><span>Архитектура</span></a>
+    <a href="#slide-8" class="side-nav-item" data-section="slide-8"><i
+        data-lucide="bar-chart-3"></i><span>Результаты</span></a>
+    <a href="#slide-9" class="side-nav-item" data-section="slide-9"><i
+        data-lucide="compass"></i><span>Сравнение</span></a>
+    <a href="#slide-10" class="side-nav-item" data-section="slide-10"><i
+        data-lucide="list"></i><span>Источники</span></a>
+    <a href="#slide-11" class="side-nav-item" data-section="slide-11"><i
+        data-lucide="check-circle"></i><span>Заключение</span></a>
   </nav>
 
   <div id="progressBar"></div>
+
+  <!-- Modal -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content" id="modalContent">
+      <button class="modal-close" id="modalCloseBtn">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="modal-header" id="modalHeader"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <script>
     class PresentationController {
@@ -214,11 +1062,10 @@
           'ArrowRight': () => this.next(), 'ArrowLeft': () => this.prev(),
           'PageDown': () => this.next(), 'PageUp': () => this.prev(),
           'Space': () => { e.preventDefault(); this.next(); }, 'Enter': () => this.next(),
-          'F5': () => this.toggleFullscreen(), 'Escape': () => this.exitFullscreen(),
+          'F5': () => this.toggleFullscreen(), 'Escape': () => { this.exitFullscreen(); this.closeModal(); },
           'KeyB': () => this.toggleBlank(), 'Period': () => this.toggleBlank(),
           'KeyW': () => this.toggleWhite(), 'Slash': () => this.toggleWhite(),
-          'KeyT': () => this.toggleTheme(), 'KeyF': () => this.toggleFullscreen(),
-          'KeyN': () => this.toggleNotes()
+          'KeyT': () => this.toggleTheme(), 'KeyN': () => this.toggleNotes()
         };
         if (actions[code]) { e.preventDefault(); e.stopPropagation(); actions[code](); return false; }
       }
@@ -230,7 +1077,7 @@
         const element = document.getElementById(id);
         if (element) {
           const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({ top: elementPosition - 20, behavior: 'smooth' });
+          window.scrollTo({ top: elementPosition, behavior: 'smooth' });
           this.updateNav(id);
           this.updateSpeakerNotes(index);
         }
@@ -285,44 +1132,116 @@
         document.getElementById('moonIcon').classList.toggle('hidden', !isDark);
         if (typeof lucide !== 'undefined') lucide.createIcons();
       }
+      openModal(title, description, sourceText, sourceUrl, accentColor) {
+        const overlay = document.getElementById('modalOverlay');
+        const header = document.getElementById('modalHeader');
+        const body = document.getElementById('modalBody');
+        header.innerHTML = `
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${accentColor}">
+            <i data-lucide="external-link" class="w-6 h-6 text-white"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">${title}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">${sourceText}</p>
+          </div>
+        `;
+        body.innerHTML = `
+          <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-5">${description}</p>
+          <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer"
+             class="modal-source-link ${accentColor} text-white">
+            <i data-lucide="link"></i>
+            <span>Открыть источник</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+        `;
+        overlay.classList.add('active');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+      closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+      }
     }
   </script>
 
   <main class="min-h-screen">
 
     <!-- ====== SLIDE 1: Title ====== -->
-    <section id="slide-1" class="min-h-screen flex items-center relative overflow-hidden" data-speaker-note="Добрый день. Представляю разработку платформы для обработки экспериментальных данных в распределённой среде. Мы реализовали полиэдральный метод поиска минимума целевой функции и подтвердили эффективность оркестрации в Kubernetes.">
-      <div class="absolute inset-0 opacity-10">
-        <img src="https://image.qwenlm.ai/public_source/25a2319a-5eed-4727-8576-6334beb173a9/13b5f558c-9f6c-4b9d-9e3f-664088e74e17.png" alt="" class="w-full h-full object-cover" />
+    <section id="slide-1" class="min-h-screen flex items-center relative overflow-hidden dark:bg-gray-900"
+      data-speaker-note="Добрый день! Меня зовут Комлев Виктор Владимирович — аспирант, и Белозерова Алла Равильевна — кандидат наук. Сегодня я представляю результаты разработки программной платформы для автоматизации обработки экспериментальных данных в распределённой среде. Мы реализовали полиэдральный метод поиска минимума целевой функции и подтвердили эффективность оркестрации вычислительных процессов в Kubernetes. Платформа построена на стеке ASP.NET Core, React, Docker и Kubernetes. В ходе работы мы продемонстрировали, что контейнеризация обеспечивает воспроизводимость результатов при сохранении научной достоверности, а оркестрация в Kubernetes позволяет координировать вычисления в распределённой среде исследовательских центров.">
+      <div class="absolute inset-0 bg-black opacity-5">
+        <img
+          src="https://image.qwenlm.ai/public_source/25a2319a-5eed-4727-8576-6334beb173a9/13b5f558c-9f6c-4b9d-9e3f-664088e74e17.png"
+          alt="" class="w-full h-full object-cover" />
       </div>
-      <div class="max-w-5xl mx-auto px-6 relative z-10 w-full">
-        <div class="slide-badge mb-8">
-          <i data-lucide="presentation" class="w-3 h-3"></i>
-          <span>Слайд 1 / 16</span>
+      <div class="max-w-6xl mx-auto px-6 relative z-10 w-full py-10">
+        <!-- QR Code — moved to top area, made bigger -->
+        <div class="flex justify-center mb-6">
+          <div class="qr-code-wrapper anim-fade-up">
+            <div class="qr-pulse"></div>
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAAC+UlEQVR4nO2cTW6jQBBGX00jZQlSDuCjwM2iuRl9lBwgUrOMBKpZVDXGmVXGivFAsbAw9pO7Ral+viosyreP/Ov7DAQUUEABBRRQQMeExI8GGQCRrl4bWASm+oVhl+UF9HioV1XVAuQOdAToS1KyNABJVVX1Fnrc8gJ6PDS5A9CRRegLkC8zQFIZABGzjX2WF9BukLy9vyhMDfRlkR/8pYCeE2q+vNfcIZqHhOauqNB+iDLttbyAdoNaVcseAOStAEwi9O8vFjVUdd5veQE9DHIfkS0+JKQvr7MAmzPgNn48+Z4Cugcyi9hI2fnyKQozmrtUL7a3WveT7ymg+yEZJhGyiGxCx8Ai+rtbxBLN3C2hR5wHypcZGVr1MgPASlDa2StSppfQI04AUZWnpGYCvarSl6Q6tqqWT662YUrW+OR7CugeqFpEq+r3vKwfFP9UVWd0DIs4BXRzz0lWgvqlgtsB9lK/GhZxfEikA3r9FHkrSa3TNZAUppdqJVcJ87/YU0B3Ro0Zzx6qo/Dul3mLpOEjTgKtKnZSof0UaD8ESLPA4mqFidpDU0XLJ99TQPdAnjNYXVHAzkY8swTcb5gHCR9xeMijRq/zX3UoJBcg+ho1otY4PlQtorCVHUyXaq8phJel4SOOD62Vpt/4q4r9JeV06Sos4ujQxiK8zLA8IrmV9Bu1InzEGaBt9kA7V6XSXpIbg52tBhIWcXxItSyi49Qg0iWVAZepwK55K3Sn5QW0Q/UJ3uSyDgdprT9chNCxnSNqnABaq0/XI67zdVeNwo5eo9N1BmjtdPnhN76ApxXVDqIbfhLIdOqaIKSqU9sY3QJMHTC9zvQjMTFzHmgTNabGhqZkICm5A3MPOZ7yOwV0q1km3Q7GtDWIAKFZnhWSYWrwYctJLJpYmfH7MiPDzssL6Mehr890AWAPcfWlQ7MA/XtDTN6eBLqtPq9TdbXdpYVN4Rm1xvGhVcUGvP1dxanxqmyrxnzEWSCJfyYLKKCAAgoooID+EfoDbhuTr4y81bMAAAAASUVORK5CYII="
+              alt="QR Code" />
+          </div>
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold mb-6 text-primary-700 dark:text-primary-300 leading-tight">
+        <div class="qr-label mb-6">
+          <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+          <span>Ссылка на презентацию и материалы</span>
+        </div>
+
+        <div class="slide-badge mb-6">
+          <i data-lucide="presentation" class="w-3 h-3"></i>
+          <span>Слайд 1 / 11</span>
+        </div>
+        <h1
+          class="text-3xl md:text-4xl font-bold mb-5 text-primary-700 dark:text-primary-300 leading-tight text-center">
           Оркестрация обработки экспериментальных данных в распределённой среде Kubernetes
         </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed max-w-3xl">
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-center max-w-4xl mx-auto">
           Платформа для автоматизации научных конвейеров на базе ASP.NET Core, React, Docker и Kubernetes
         </p>
-        <div class="flex flex-wrap items-center gap-6 mb-8 text-sm text-gray-500 dark:text-gray-400">
-          <span class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i>Комлев В.В.</span>
-          <span class="flex items-center gap-2"><i data-lucide="building-2" class="w-4 h-4"></i>ДИТИ НИЯУ МИФИ</span>
-          <span class="flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i>Volga Cyber Week 2026</span>
+        <div class="flex flex-wrap items-center justify-center gap-6 mb-6 text-sm text-gray-500 dark:text-gray-400">
+          <span class="flex items-start gap-3">
+            <i data-lucide="users" class="w-6 h-6 mt-1"></i>
+            <div class="flex flex-col">
+              <span class="font-medium text-sm">Комлев Виктор Владимирович</span>
+              <span class="text-xs text-gray-500">аспирант</span>
+            </div>
+          </span>
+          <span class="flex items-start gap-3">
+            <i data-lucide="user-check" class="w-6 h-6 mt-1"></i>
+            <div class="flex flex-col">
+              <span class="font-medium text-sm">Белозерова Алла Равильевна</span>
+              <span class="text-xs text-gray-500">кандидат наук</span>
+            </div>
+          </span>
+          <!-- Организация -->
+          <span class="flex items-center gap-2.5">
+            <i data-lucide="building-2" class="w-6 h-6 flex-shrink-0"></i>
+            <div class="flex flex-col">
+              <span class="font-medium text-sm">ДИТИ</span>
+              <span class="text-xs text-gray-500">НИЯУ МИФИ</span>
+            </div>
+          </span>
+
+          <!-- Конференция -->
+          <span class="flex items-center gap-2.5">
+            <i data-lucide="calendar" class="w-6 h-6 flex-shrink-0"></i>
+            <span class=" text-sm whitespace-nowrap">Volga Cyber Week 2026</span>
+          </span>
         </div>
-        <div class="mb-6">
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3 font-semibold uppercase tracking-wider">Ключевые слова:</p>
-          <div class="flex flex-wrap gap-2">
+        <div class="mb-6 text-center">
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3 font-semibold uppercase tracking-wider">Ключевые
+            слова:</p>
+          <div class="flex flex-wrap gap-2 justify-center">
             <span class="keyword-tag">Docker</span>
             <span class="keyword-tag">Kubernetes</span>
             <span class="keyword-tag">ASP.NET Core</span>
             <span class="keyword-tag">React</span>
-            <span class="keyword-tag">Полиэдральный метод</span>
+            <span class="keyword-tag">Метод параметризованного приближения</span>
             <span class="keyword-tag">Контейнеризация</span>
           </div>
         </div>
-        <div class="tech-logo-row">
+        <div class="tech-logo-row mt-6">
           <span><i data-lucide="boxes" class="w-5 h-5"></i>Kubernetes</span>
           <span><i data-lucide="container" class="w-5 h-5"></i>Docker</span>
           <span><i data-lucide="code-2" class="w-5 h-5"></i>.NET</span>
@@ -332,16 +1251,16 @@
     </section>
 
     <!-- ====== SLIDE 2: Abstract ====== -->
-    <section id="slide-2" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Аннотация: разработана платформа для обработки экспериментальных данных в распределённой среде. Реализован полиэдральный метод поиска минимума целевой функции. Эксперименты показали сокращение времени обработки на 33% при сохранении точности.">
+    <section id="slide-2" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900"
+      data-speaker-note="Аннотация: нами разработана программная платформа для обработки экспериментальных данных в распределённой среде. Реализован полиэдральный метод поиска минимума целевой функции — метод деформируемого многогранника Нелдера-Мида. Архитектура платформы включает ASP.NET Core для backend-оркестратора, React для пользовательского интерфейса, Docker для контейнеризации вычислительных модулей и Kubernetes для оркестрации. Экспериментальные результаты подтвердили эффективность подхода: сокращение времени обработки на 33%, снижение потребления оперативной памяти на 15%, при полном сохранении точности результатов — относительное стандартное отклонение RSD составило 1,6%, что идентично нативной реализации. Реализация алгоритма на C# превосходит Python-аналог в 11,4 раза по скорости при одинаковой точности. Платформа готова к применению в межлабораторных сличительных испытаниях.">
       <div class="max-w-5xl mx-auto px-6 w-full py-16">
         <div class="slide-badge mb-6">
           <i data-lucide="file-text" class="w-3 h-3"></i>
-          <span>Слайд 2 / 16 — Аннотация</span>
+          <span>Слайд 2 / 11 — Аннотация</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Аннотация
-        </h2>
-        <div class="bg-primary-50/50 dark:bg-primary-900/20 rounded-xl p-8 border border-primary-200 dark:border-primary-800/50 mb-8">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Аннотация</h2>
+        <div
+          class="bg-primary-50/50 dark:bg-primary-900/20 rounded-xl p-8 border border-primary-200 dark:border-primary-800/50 mb-8">
           <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             Разработана платформа для обработки экспериментальных данных в распределённой среде. Реализован
             <strong>полиэдральный метод</strong> поиска минимума целевой функции. Архитектура включает
@@ -355,10 +1274,15 @@
               <i data-lucide="layers" class="w-5 h-5"></i> Реализация
             </h3>
             <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Полиэдральный метод (Нелдера — Мида)</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Backend: ASP.NET Core</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Frontend: React SPA</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Оркестрация: Kubernetes</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Метод деформируемого многогранника
+                  (Нелдера — Мида)</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Backend: ASP.NET Core</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Frontend: React SPA</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Оркестрация: Kubernetes</span></li>
             </ul>
           </div>
           <div class="card-interactive p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
@@ -366,10 +1290,17 @@
               <i data-lucide="trending-up" class="w-5 h-5"></i> Ключевые результаты
             </h3>
             <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-              <li class="flex items-start gap-2"><i data-lucide="arrow-down" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i><span>Время обработки: <strong>−33%</strong></span></li>
-              <li class="flex items-start gap-2"><i data-lucide="arrow-down" class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i><span>Потребление ОЗУ: 1220 → 1040 МБ</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="equal" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i><span>RSD: 1,6% (без изменений)</span></li>
-              <li class="flex items-start gap-2"><i data-lucide="zap" class="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0"></i><span>C# vs Python: <strong>11,4×</strong> быстрее</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="arrow-down"
+                  class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i><span>Время обработки:
+                  <strong>−33%</strong></span></li>
+              <li class="flex items-start gap-2"><i data-lucide="arrow-down"
+                  class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i><span>Потребление ОЗУ: 1220 → 1040 МБ</span>
+              </li>
+              <li class="flex items-start gap-2"><i data-lucide="equal"
+                  class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i><span>RSD: 1,6% (без изменений)</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="zap"
+                  class="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0"></i><span>C# vs Python: <strong>11,4×</strong>
+                  быстрее</span></li>
             </ul>
           </div>
         </div>
@@ -377,21 +1308,21 @@
     </section>
 
     <!-- ====== SLIDE 3: Introduction ====== -->
-    <section id="slide-3" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800" data-speaker-note="Введение: автоматизация обработки экспериментальных данных в распределённых исследовательских центрах требует обеспечения воспроизводимости вычислений и масштабируемости ресурсов. Цель — формализовать модель оркестрации в среде Kubernetes.">
+    <section id="slide-3" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800"
+      data-speaker-note="Введение. Автоматизация обработки экспериментальных данных в распределённых исследовательских центрах требует обеспечения воспроизводимости вычислений и масштабируемости ресурсов. На практике мы сталкиваемся с несколькими ключевыми проблемами: разнородность методов обработки данных в разных лабораториях, ручное управление вычислительными ресурсами приводит к неравномерной загрузке серверов, отсутствие единой платформы для координации вычислений. Цель нашей работы — формализовать модель оркестрации вычислительных процессов в среде Kubernetes и подтвердить её эффективность в условиях межлабораторных сличительных испытаний. Для решения мы предлагаем единую платформу с контейнеризацией каждого вычислительного модуля в Docker и оркестрацией через Kubernetes, что обеспечивает воспроизводимость, масштабируемость и координацию в распределённой среде.">
       <div class="max-w-5xl mx-auto px-6 w-full py-16">
         <div class="slide-badge mb-6">
           <i data-lucide="book-open" class="w-3 h-3"></i>
-          <span>Слайд 3 / 16 — Введение</span>
+          <span>Слайд 3 / 11 — Введение</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Введение
-        </h2>
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Введение</h2>
         <div class="space-y-6 mb-8">
           <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
             Автоматизация обработки экспериментальных данных в распределённых исследовательских центрах требует
             обеспечения <strong>воспроизводимости вычислений</strong> и <strong>масштабируемости ресурсов</strong>.
           </p>
-          <div class="card-interactive p-6 bg-white/90 dark:bg-gray-900 rounded-xl shadow-md border-l-4 border-primary-500">
+          <div
+            class="card-interactive p-6 bg-white/90 dark:bg-gray-900 rounded-xl shadow-md border-l-4 border-primary-500">
             <h3 class="font-semibold text-primary-700 dark:text-primary-300 mb-3">Цель работы</h3>
             <p class="text-gray-700 dark:text-gray-300">
               Формализовать модель оркестрации вычислительных процессов в среде Kubernetes и подтвердить её
@@ -400,274 +1331,545 @@
           </div>
         </div>
         <div class="grid md:grid-cols-2 gap-6">
-          <div class="card-interactive p-5 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
+          <div
+            class="card-interactive red-card p-5 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
             <h3 class="font-semibold text-red-700 dark:text-red-400 mb-2">Проблема</h3>
-            <p class="text-sm text-gray-700 dark:text-gray-300">Разнородность методов, ручное управление, неравномерная загрузка серверов</p>
+            <p class="text-sm text-gray-700 dark:text-gray-300">Разнородность методов, ручное управление, неравномерная
+              загрузка серверов</p>
           </div>
-          <div class="card-interactive p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
+          <div
+            class="card-interactive green-card p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
             <h3 class="font-semibold text-green-700 dark:text-green-400 mb-2">Решение</h3>
-            <p class="text-sm text-gray-700 dark:text-gray-300">Единая платформа с контейнеризацией и оркестрацией в Kubernetes</p>
+            <p class="text-sm text-gray-700 dark:text-gray-300">Единая платформа с контейнеризацией и оркестрацией в
+              Kubernetes</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====== SLIDE 4: Formalization ====== -->
-    <section id="slide-4" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Формализация задачи полиэдрального метода для поиска минимума функции. Главная цель — минимизация целевой функции S(x). Значения Ri(x) требуют нормировки на 10⁻⁶.">
+    <section id="slide-4" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900"
+      data-speaker-note="Формализация задачи. Главная цель — минимизация целевой функции S(x), которая представляет собой сумму квадратов относительных отклонений рассчитанных значений скоростей реакций от экспериментальных данных. Функция S(x) определена как сумма по трём компонентам: для каждого i от 1 до 3 вычисляется квадрат отношения (1 минус Ri(x) делённое на Ai), делённый на 10. Здесь Ai — это значения, полученные непосредственно из эксперимента, а Ri(x) — рассчитанные значения скоростей реакций. Важный момент: значения Ri(x) требуют нормировки — их необходимо умножить на 10 в степени минус 6. Вектор параметров x состоит из четырёх координат: X1, X2, X3, X4, транспонированный, где каждая координата находится в заданном диапазоне от xmin до xmax.">
       <div class="max-w-5xl mx-auto px-6 w-full py-16">
         <div class="slide-badge mb-6">
           <i data-lucide="sigma" class="w-3 h-3"></i>
-          <span>Слайд 4 / 16 — Формализация</span>
+          <span>Слайд 4 / 11 — Формализация</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Формализация задачи полиэдрального метода
-        </h2>
-        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-          Главная цель заключается в минимизации целевой функции:
-        </p>
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Формализация задачи полиэдрального
+          метода</h2>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">Главная цель заключается в минимизации целевой
+          функции:</p>
         <div class="formula-display text-lg mb-6">
-          S(x) = Σ<sub>i=1</sub><sup>3</sup> (1 − R<sub>i</sub>(x) / A<sub>i</sub>)² · 10 → min
+          S(x) = Σ<sub>i=1</sub><sup>3</sup> (1 − R<sub>i</sub>(x) / A<sub>i</sub>)² / 10 → min
         </div>
         <div class="grid md:grid-cols-2 gap-6 mb-6">
-          <div class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
+          <div
+            class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
             <h3 class="font-semibold text-blue-700 dark:text-blue-400 mb-2">Обозначения</h3>
             <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li>• <strong>A<sub>i</sub></strong> — значения, полученные из эксперимента</li>
               <li>• <strong>R<sub>i</sub>(x)</strong> — рассчитанные значения скоростей реакций</li>
             </ul>
           </div>
-          <div class="card-interactive p-5 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
+          <div
+            class="card-interactive p-5 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
             <h3 class="font-semibold text-amber-700 dark:text-amber-400 mb-2">Нормировка</h3>
             <div class="formula-display text-sm">
               R<sub>i</sub>(x) ⇒ R<sub>i</sub>(x) · 10<sup>−6</sup>
             </div>
           </div>
         </div>
-        <div class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div
+          class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Вектор параметров</h3>
           <div class="formula-display text-sm">
-            x = (X<sub>1</sub>, X<sub>2</sub>, X<sub>3</sub>, X<sub>4</sub>)<sup>T</sup>, где X<sub>i</sub> ∈ [x<sub>min</sub>; x<sub>max</sub>], i = 1..n
+            x = (X<sub>1</sub>, X<sub>2</sub>, X<sub>3</sub>, X<sub>4</sub>)<sup>T</sup>, где X<sub>i</sub> ∈
+            [x<sub>min</sub>; x<sub>max</sub>], i = 1..n
           </div>
         </div>
       </div>
     </section>
 
     <!-- ====== SLIDE 5: Target Function ====== -->
-      <section id="slide-5" class="py-20 bg-white/80 dark:bg-gray-900" data-speaker-note="Чтобы показать работу платформы, возьмем сложный метод оптимизации — полиэдральный поиск. Он требует много итераций и чувствителен к задержкам. Мы упаковали его в контейнер...">
-      <div class="max-w-5xl mx-auto px-6">
+    <section id="slide-5" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800"
+      data-speaker-note="Для демонстрации работы платформы мы выбрали сложный метод оптимизации — полиэдральный поиск минимума целевой функции, также известный как метод деформируемого многогранника или метод Нелдера-Мида. Этот метод требует большого количества итераций и чувствителен к задержкам вычислений, что делает его отличным кандидатом для демонстрации преимуществ контейнеризации и оркестрации. Суть задачи — минимизация суммы квадратов относительных отклонений рассчитанных значений от экспериментальных. Алгоритм работает с симплексом — выпуклой оболочкой из n+1 вершин в n-мерном пространстве. Для четырёхмерного пространства это пентахорон с пятью вершинами. Мы реализовали этот алгоритм на C# из-за его высокой производительности и упаковали в Docker-контейнер.">
+      <div class="max-w-5xl mx-auto px-6 py-16">
         <div class="slide-badge mb-4">
           <i data-lucide="triangle" class="w-3 h-3"></i>
-          <span>Слайд 5 / 16 — Блок 3: Демонстрация</span>
+          <span>Слайд 5 / 11 — Целевая функция</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Полиэдральный метод: поиск минимума целевой функции
-        </h2>
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Метод параметризованного приближения:
+          поиск минимума целевой функции</h2>
         <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
           <div class="space-y-5">
-            <div class="card-interactive p-5 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
+            <div
+              class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
               <h3 class="font-semibold text-amber-700 dark:text-amber-400 mb-2">Задача</h3>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">Минимизация суммы квадратов относительных отклонений:</p>
-              <div class="formula-display">
-                S(x) = Σ (1 − R(x)/Aᵢ)²
-              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">Минимизация суммы квадратов относительных
+                отклонений:</p>
+              <div class="formula-display">S(x) = Σ (1 − R(x)/A)²</div>
             </div>
-            <div class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
+            <div
+              class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
               <h3 class="font-semibold text-blue-700 dark:text-blue-400 mb-2">Алгоритм</h3>
-              <p class="text-sm text-gray-700 dark:text-gray-300">Метод деформируемого многогранника (Нелдера — Мида). Много итераций, чувствителен к задержкам.</p>
+              <p class="text-sm text-gray-700 dark:text-gray-300">Метод деформируемого многогранника (Нелдера — Мида).
+                Много итераций, чувствителен к задержкам.</p>
             </div>
-            <div class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div
+              class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
               <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Реализация</h3>
-              <p class="text-sm text-gray-700 dark:text-gray-300">C# (высокая производительность) в Docker-контейнере</p>
+              <p class="text-sm text-gray-700 dark:text-gray-300">C# (высокая производительность) в Docker-контейнере
+              </p>
             </div>
           </div>
           <div class="flex items-center justify-center">
             <img
               src="https://image.qwenlm.ai/public_source/25a2319a-5eed-4727-8576-6334beb173a9/1e99de72e-8dcc-4bac-afc5-e790e5a08af5.png"
-              alt="Полиэдральный симплекс"
-              class="w-full max-w-md rounded-xl shadow-lg" />
+              alt="Полиэдральный симплекс" class="w-full max-w-md rounded-xl shadow-lg" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 6: Simplex Operations ====== -->
-    <section id="slide-6" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Алгоритм поиска минимума включает четыре операции: отражение (α=1), растяжение (β=2,8), сжатие (γ=0,6) и редукция. Каждая операция применяется в зависимости от значения целевой функции.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
-          <i data-lucide="pentagon" class="w-3 h-3"></i>
-          <span>Слайд 6 / 16 — Операции симплекса</span>
-        </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Операции алгоритма поиска минимума
-        </h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">1</div>
-              <h3 class="font-semibold text-blue-700 dark:text-blue-400">Отражение</h3>
-            </div>
-            <div class="formula-display text-xs mb-2">
-              x<sub>n+3</sub><sup>(k)</sup> = x<sub>n+2</sub><sup>(k)</sup> + α · (x<sub>n+2</sub><sup>(k)</sup> − x<sub>h</sub><sup>(k)</sup>)
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400">α = 1 — коэффициент отражения</p>
-          </div>
-          <div class="card-interactive p-5 bg-purple-50/50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">2</div>
-              <h3 class="font-semibold text-purple-700 dark:text-purple-400">Растяжение</h3>
-            </div>
-            <div class="formula-display text-xs mb-2">
-              x<sub>n+4</sub><sup>(k)</sup> = x<sub>n+2</sub><sup>(k)</sup> + β · (x<sub>n+3</sub><sup>(k)</sup> − x<sub>n+2</sub><sup>(k)</sup>)
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400">β = 2,8 — коэффициент растяжения</p>
-          </div>
-          <div class="card-interactive p-5 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">3</div>
-              <h3 class="font-semibold text-amber-700 dark:text-amber-400">Сжатие</h3>
-            </div>
-            <div class="formula-display text-xs mb-2">
-              x<sub>n+5</sub><sup>(k)</sup> = x<sub>n+2</sub><sup>(k)</sup> + γ · (x<sub>h</sub><sup>(k)</sup> − x<sub>n+2</sub><sup>(k)</sup>)
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400">γ = 0,6 — коэффициент сжатия</p>
-          </div>
-          <div class="card-interactive p-5 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">4</div>
-              <h3 class="font-semibold text-red-700 dark:text-red-400">Редукция</h3>
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Все векторы x<sub>i</sub><sup>(k)</sup> уменьшаются в 2 раза отсчётом от x<sub>l</sub><sup>(k)</sup>:</p>
-            <div class="formula-display text-xs">
-              x<sub>i</sub><sup>(k+1)</sup> = (x<sub>i</sub><sup>(k)</sup> + x<sub>l</sub><sup>(k)</sup>) / 2
-            </div>
-          </div>
-        </div>
-        <div class="mt-6 card-interactive p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
-          <h3 class="font-semibold text-green-700 dark:text-green-400 mb-2">Критерий окончания</h3>
-          <div class="formula-display text-sm">
-            ((1/(n+1)) Σ<sub>i=1</sub><sup>n+1</sup> (S(x<sub>i</sub><sup>(k)</sup>) − S(x̄))²) &lt; ε
-          </div>
-          <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">где x̄ — значение целевой функции в центре тяжести</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== SLIDE 7: Algorithm Flow ====== -->
-    <section id="slide-7" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800" data-speaker-note="Процедура отыскания вершин состоит из последовательного применения операций: отражение, растяжение, сжатие, редукция. После каждой операции проверяется условие продолжения поиска.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
+    <!-- ====== SLIDE 6: Algorithm ====== -->
+    <section id="slide-6" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900"
+      data-speaker-note="Алгоритм поиска минимума включает четыре основные операции, которые последовательно применяются к симплексу. Первая операция — отражение: наихудшая вершина xh проецируется через центр тяжести всех остальных вершин с коэффициентом отражения альфа равным 1. Вторая операция — растяжение: если отражённая точка даёт лучшее значение целевой функции, вектор растягивается с коэффициентом бета равным 2,8. Третья операция — сжатие: если отражение не улучшило результат, применяется сжатие с коэффициентом гамма равным 0,6. Четвёртая операция — редукция: если ни одна из предыдущих операций не помогла, все вершины многогранника уменьшаются вдвое относительно наилучшей вершины xl. После каждой операции процедура возвращается к отражению для продолжения поиска. Критерий окончания — дисперсия значений целевой функции в вершинах многогранника должна стать меньше заданного эпсилон.">
+      <div class="max-w-6xl mx-auto px-6 w-full py-12">
         <div class="slide-badge mb-6">
           <i data-lucide="git-branch" class="w-3 h-3"></i>
-          <span>Слайд 7 / 16 — Алгоритм</span>
+          <span>Слайд 6 / 11 — Алгоритм</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Процедура отыскания минимума S(x)
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Процедура отыскания минимума S(x)
         </h2>
-        <div class="grid md:grid-cols-4 gap-4">
-          <div class="card-interactive p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl text-center border border-blue-200 dark:border-blue-800/50">
-            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">1</div>
-            <h4 class="font-semibold text-blue-700 dark:text-blue-400 text-sm mb-1">Отражение</h4>
-            <p class="text-xs text-gray-600 dark:text-gray-400">Проектирование x<sub>h</sub> через центр тяжести</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div
+            class="card-interactive bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50 overflow-hidden">
+            <div class="p-5 text-center">
+              <div
+                class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold text-lg shadow-lg shadow-blue-500/30">
+                1</div>
+              <h4 class="font-bold text-blue-700 dark:text-blue-400 mb-3">Отражение</h4>
+              <div class="bg-white/70 dark:bg-gray-800/50 rounded-lg p-3 mb-3">
+                <div class="text-xs text-gray-800 dark:text-gray-200 font-mono leading-relaxed whitespace-nowrap">
+                  x<sub>n+3</sub> = x<sub>n+2</sub> + α · (x<sub>n+2</sub> − x<sub>h</sub>)
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                <span class="dark:text-gray-300">α = 1</span>
+              </p>
+            </div>
           </div>
-          <div class="card-interactive p-4 bg-purple-50/50 dark:bg-purple-900/20 rounded-xl text-center border border-purple-200 dark:border-purple-800/50">
-            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">2</div>
-            <h4 class="font-semibold text-purple-700 dark:text-purple-400 text-sm mb-1">Растяжение</h4>
-            <p class="text-xs text-gray-600 dark:text-gray-400">Увеличение шага при удачном отражении</p>
+          <div
+            class="card-interactive bg-purple-50/50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800/50 overflow-hidden">
+            <div class="p-5 text-center">
+              <div
+                class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold text-lg shadow-lg shadow-purple-500/30">
+                2</div>
+              <h4 class="font-bold text-purple-700 dark:text-purple-400 mb-3">Растяжение</h4>
+              <div class="bg-white/70 dark:bg-gray-800/50 rounded-lg p-3 mb-3">
+                <div class="text-xs text-gray-800 dark:text-gray-200 font-mono leading-relaxed whitespace-nowrap">
+                  x<sub>n+4</sub> = x<sub>n+2</sub> + β · (x<sub>n+3</sub> − x<sub>n+2</sub>)
+                </div>
+              </div>
+              <p class="text-xs text-gray-500">β = 2,8</p>
+            </div>
           </div>
-          <div class="card-interactive p-4 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl text-center border border-amber-200 dark:border-amber-800/50">
-            <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">3</div>
-            <h4 class="font-semibold text-amber-700 dark:text-amber-400 text-sm mb-1">Сжатие</h4>
-            <p class="text-xs text-gray-600 dark:text-gray-400">Уменьшение шага при неудачном отражении</p>
+          <div
+            class="card-interactive bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50 overflow-hidden">
+            <div class="p-5 text-center">
+              <div
+                class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold text-lg shadow-lg shadow-amber-500/30">
+                3</div>
+              <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-3">Сжатие</h4>
+              <div class="bg-white/70 dark:bg-gray-800/50 rounded-lg p-3 mb-3">
+                <div class="text-xs text-gray-800 dark:text-gray-200 font-mono leading-relaxed whitespace-nowrap">
+                  x<sub>n+5</sub> = x<sub>n+2</sub> + γ · (x<sub>h</sub> − x<sub>n+2</sub>)
+                </div>
+              </div>
+              <p class="text-xs text-gray-500">γ = 0,6</p>
+            </div>
           </div>
-          <div class="card-interactive p-4 bg-red-50/50 dark:bg-red-900/20 rounded-xl text-center border border-red-200 dark:border-red-800/50">
-            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">4</div>
-            <h4 class="font-semibold text-red-700 dark:text-red-400 text-sm mb-1">Редукция</h4>
-            <p class="text-xs text-gray-600 dark:text-gray-400">Половинное уменьшение всех вершин</p>
+          <div
+            class="card-interactive red-card bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50 overflow-hidden">
+            <div class="p-5 text-center">
+              <div
+                class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold text-lg shadow-lg shadow-red-500/30">
+                4</div>
+              <h4 class="font-bold text-red-700 dark:text-red-400 mb-3">Редукция</h4>
+              <div class="bg-white/70 dark:bg-gray-800/50 rounded-lg p-3 mb-3">
+                <div class="text-xs text-gray-800 dark:text-gray-200 font-mono leading-relaxed whitespace-nowrap">
+                  x<sub>i</sub><sup>(k+1)</sup> = (x<sub>i</sub> + x<sub>l</sub>) / 2
+                </div>
+              </div>
+              <p class="text-xs text-gray-500">Вдвое от x<sub>l</sub></p>
+            </div>
           </div>
+        </div>
+
+        <div
+          class="card-interactive p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
+          <h3 class="font-semibold text-green-700 dark:text-green-400 mb-3">Критерий окончания</h3>
+          <div class="formula-display text-sm overflow-x-auto">
+            <span class="whitespace-nowrap">((1 / (n + 1)) · Σ<sub>i=1</sub><sup>n+1</sup>
+              (S(x<sub>i</sub><sup>(k)</sup>) − S(x̄))²) &lt; ε</span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">где x̄ — значение целевой функции в центре тяжести
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 8: Architecture ====== -->
-    <section id="slide-8" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Архитектура платформы: React SPA для интерфейса пользователя, ASP.NET Core API как оркестратор вычислений, Docker-контейнеры для методов, Kubernetes для управления кластером.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
+    <!-- ====== SLIDE 7: Architecture ====== -->
+    <section id="slide-7" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800"
+      data-speaker-note="Архитектура платформы: система развёрнута в контейнерной среде Docker с оркестрацией Kubernetes. Кластер включает управляющий узел Control Plane с компонентами: kube-apiserver принимает и обрабатывает REST-запросы, kube-scheduler распределяет Pods по рабочим узлам, controller-manager управляет состоянием кластера, etcd хранит всю конфигурацию. На рабочих узлах запускаются Pods с контейнерами: React SPA для пользовательского интерфейса, ASP.NET Core API для backend-оркестратора вычислений. Service-объекты Kubernetes обеспечивают сетевое взаимодействие между компонентами и стабильные IP-адреса. Контейнеризация проходит через пять этапов: исходный код C# и TypeScript компилируется, Dockerfile описывает образ, собирается Docker Image, развёртывается как K8s Pod в рабочий кластер. Каждый компонент изолирован в собственном контейнере с помощью namespaces, cgroups и overlay filesystem Docker.">
+      <div class="max-w-5xl mx-auto px-6 w-full py-10">
+        <div class="slide-badge mb-4">
           <i data-lucide="layers" class="w-3 h-3"></i>
-          <span>Слайд 8 / 16 — Архитектура</span>
+          <span>Слайд 7 / 11 — Архитектура</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Архитектура платформы
-        </h2>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center"><i data-lucide="monitor" class="w-4 h-4 text-white"></i></div>
-              <h3 class="font-semibold text-blue-700 dark:text-blue-400">React SPA</h3>
+        <h2 class="text-3xl font-bold mb-3 text-primary-700 dark:text-primary-300">Архитектура: Kubernetes и
+          контейнеризация</h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-6 text-sm">Нажмите на компонент для подробного описания</p>
+
+        <div class="k8s-diagram">
+          <div class="k8s-cluster-border anim-fade-up">
+            <div class="k8s-layer-label bg-blue-600">Kubernetes Cluster</div>
+
+            <!-- Control Plane -->
+            <div class="k8s-layer k8s-master-node mb-4 anim-fade-up anim-delay-1"
+              data-info="Control Plane — управляющий узел Kubernetes. API Server принимает и обрабатывает REST-запросы, Scheduler распределяет Pods по узлам, Controller Manager управляет состоянием кластера, etcd хранит конфигурацию.">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="font-bold text-sm">Control Plane (Master Node)</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <div
+                  class="k8s-component bg-white/20 backdrop-blur-sm rounded-md text-white text-xs cursor-pointer hover:bg-white/30 transition-colors"
+                  data-info="kube-apiserver — фронтенд управляющей плоскости. Принимает REST-запросы и валидирует конфигурацию кластера.">
+                  <i data-lucide="server" class="w-3 h-3"></i> kube-apiserver
+                </div>
+                <div
+                  class="k8s-component bg-white/20 backdrop-blur-sm rounded-md text-white text-xs cursor-pointer hover:bg-white/30 transition-colors"
+                  data-info="kube-scheduler — определяет, на каком узле запустить новый Pod, учитывая ресурсы, политики и ограничения.">
+                  <i data-lucide="calendar" class="w-3 h-3"></i> kube-scheduler
+                </div>
+                <div
+                  class="k8s-component bg-white/20 backdrop-blur-sm rounded-md text-white text-xs cursor-pointer hover:bg-white/30 transition-colors"
+                  data-info="kube-controller-manager — запускает контроллеры, отслеживающие состояние кластера.">
+                  <i data-lucide="cpu" class="w-3 h-3"></i> controller-manager
+                </div>
+                <div
+                  class="k8s-component bg-white/20 backdrop-blur-sm rounded-md text-white text-xs cursor-pointer hover:bg-white/30 transition-colors"
+                  data-info="etcd — распределённое key-value хранилище, содержащее всю конфигурацию и состояние кластера.">
+                  <i data-lucide="database" class="w-3 h-3"></i> etcd
+                </div>
+              </div>
             </div>
-            <p class="text-sm text-gray-700 dark:text-gray-300">Интерфейс пользователя, конструктор пайплайнов, мониторинг</p>
+
+            <div class="flex items-center justify-center my-2 anim-fade-up anim-delay-2">
+              <div class="w-px h-6 bg-blue-400"></div>
+            </div>
+
+            <!-- Worker Nodes -->
+            <div class="grid md:grid-cols-2 gap-4 anim-fade-up anim-delay-3">
+              <div class="k8s-worker-node"
+                data-info="Worker Node 1 — вычислительный узел, запускающий Pods с приложениями. kubelet управляет жизненным циклом контейнеров, kube-proxy обеспечивает сетевое взаимодействие.">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="font-bold text-sm text-gray-800 dark:text-gray-200">Worker Node 1</span>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-2">
+                  <span
+                    class="k8s-component bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs">kubelet</span>
+                  <span
+                    class="k8s-component bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs">kube-proxy</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="k8s-pod"
+                    data-info="Pod с React SPA — Single Page Application для интерфейса пользователя. Запускается в Docker-контейнере с Nginx для раздачи статических файлов.">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 bg-cyan-100 dark:bg-cyan-900/40 rounded flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" class="w-3 h-3 text-cyan-600" fill="currentColor">
+                          <circle cx="12" cy="12" r="2" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor"
+                            stroke-width="1.5" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"
+                            transform="rotate(60 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"
+                            transform="rotate(120 12 12)" />
+                        </svg>
+                      </div>
+                      <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Pod</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div
+                        class="flex items-center gap-1 p-1 bg-cyan-50 dark:bg-cyan-900/20 rounded text-xs text-cyan-700 dark:text-cyan-300 font-medium">
+                        React SPA</div>
+                      <div
+                        class="flex items-center gap-1 p-1 bg-indigo-50 dark:bg-indigo-900/20 rounded text-xs text-indigo-700 dark:text-indigo-300 font-medium">
+                        Nginx</div>
+                    </div>
+                  </div>
+                  <div class="k8s-pod"
+                    data-info="Pod с ASP.NET Core API — backend-оркестратор вычислений. Управляет жизненным циклом вычислительных задач, написан на C#.">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 bg-purple-100 dark:bg-purple-900/40 rounded flex items-center justify-center">
+                        <i data-lucide="code-2" class="w-3 h-3 text-purple-600"></i>
+                      </div>
+                      <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Pod</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div
+                        class="flex items-center gap-1 p-1 bg-purple-50 dark:bg-purple-900/20 rounded text-xs text-purple-700 dark:text-purple-300 font-medium">
+                        ASP.NET Core</div>
+                      <div
+                        class="flex items-center gap-1 p-1 bg-blue-50 dark:bg-blue-900/20 rounded text-xs text-blue-700 dark:text-blue-300 font-medium">
+                        Метод расчёта</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="k8s-worker-node"
+                data-info="Worker Node 2 — второй вычислительный узел для горизонтального масштабирования. Запускает дополнительные экземпляры Pods при увеличении нагрузки.">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="font-bold text-sm text-gray-800 dark:text-gray-200">Worker Node 2</span>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-2">
+                  <span
+                    class="k8s-component bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs">kubelet</span>
+                  <span
+                    class="k8s-component bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs">kube-proxy</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="k8s-pod"
+                    data-info="Реплика Pod с ASP.NET Core API — автоматически масштабируемый экземпляр backend-сервиса на C#.">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 bg-purple-100 dark:bg-purple-900/40 rounded flex items-center justify-center">
+                        <i data-lucide="code-2" class="w-3 h-3 text-purple-600"></i>
+                      </div>
+                      <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Pod</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div
+                        class="flex items-center gap-1 p-1 bg-purple-50 dark:bg-purple-900/20 rounded text-xs text-purple-700 dark:text-purple-300 font-medium">
+                        ASP.NET Core</div>
+                      <div
+                        class="flex items-center gap-1 p-1 bg-blue-50 dark:bg-blue-900/20 rounded text-xs text-blue-700 dark:text-blue-300 font-medium">
+                        Метод расчёта</div>
+                    </div>
+                  </div>
+                  <div class="k8s-pod"
+                    data-info="Реплика Pod с React SPA — обеспечивает отказоустойчивость frontend-компонента.">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 bg-cyan-100 dark:bg-cyan-900/40 rounded flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" class="w-3 h-3 text-cyan-600" fill="currentColor">
+                          <circle cx="12" cy="12" r="2" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor"
+                            stroke-width="1.5" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"
+                            transform="rotate(60 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"
+                            transform="rotate(120 12 12)" />
+                        </svg>
+                      </div>
+                      <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Pod</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div
+                        class="flex items-center gap-1 p-1 bg-cyan-50 dark:bg-cyan-900/20 rounded text-xs text-cyan-700 dark:text-cyan-300 font-medium">
+                        React SPA</div>
+                      <div
+                        class="flex items-center gap-1 p-1 bg-indigo-50 dark:bg-indigo-900/20 rounded text-xs text-indigo-700 dark:text-indigo-300 font-medium">
+                        Nginx</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-interactive p-5 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-xl border border-indigo-200 dark:border-indigo-800/50">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center"><i data-lucide="cpu" class="w-4 h-4 text-white"></i></div>
-              <h3 class="font-semibold text-indigo-700 dark:text-indigo-400">ASP.NET Core API</h3>
-            </div>
-            <p class="text-sm text-gray-700 dark:text-gray-300">Оркестратор вычислений, управление жизненным циклом задач</p>
+
+          <div class="flex items-center justify-center my-2 anim-fade-up anim-delay-4">
+            <div class="w-px h-4 bg-green-400"></div>
           </div>
-          <div class="card-interactive p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center"><i data-lucide="boxes" class="w-4 h-4 text-white"></i></div>
-              <h3 class="font-semibold text-gray-700 dark:text-gray-300">Kubernetes + Docker</h3>
+          <div class="grid md:grid-cols-2 gap-3 anim-fade-up anim-delay-4">
+            <div
+              class="k8s-layer bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800/50 rounded-xl p-3"
+              data-info="Service — абстракция Kubernetes, определяющая логический набор Pods и политику доступа к ним. Обеспечивает стабильный IP-адрес и DNS-имя.">
+              <div class="flex items-center gap-2 mb-1">
+                <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center"><i data-lucide="network"
+                    class="w-3 h-3 text-white"></i></div>
+                <span class="font-bold text-sm text-green-800 dark:text-green-300">Services</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <span
+                  class="k8s-component bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300 text-xs">Service:
+                  React</span>
+                <span
+                  class="k8s-component bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300 text-xs">Service:
+                  API</span>
+                <span
+                  class="k8s-component bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300 text-xs">Ingress</span>
+              </div>
             </div>
-            <p class="text-sm text-gray-700 dark:text-gray-300">Кластер с контейнерами для вычислительных методов</p>
+            <div
+              class="k8s-layer bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-800/50 rounded-xl p-3"
+              data-info="Внешний доступ — пользователи взаимодействуют с платформой через браузер. Ingress Controller маршрутизирует трафик к сервисам внутри кластера.">
+              <div class="flex items-center gap-2 mb-1">
+                <div class="w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center"><i data-lucide="users"
+                    class="w-3 h-3 text-white"></i></div>
+                <span class="font-bold text-sm text-amber-800 dark:text-amber-300">Внешний доступ</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <span
+                  class="k8s-component bg-amber-100 dark:bg-amber-800/30 text-amber-700 dark:text-amber-300 text-xs">Браузер</span>
+                <span
+                  class="k8s-component bg-amber-100 dark:bg-amber-800/30 text-amber-700 dark:text-amber-300 text-xs">REST
+                  API</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="infoPanel"
+          class="mt-4 p-4 bg-primary-50/50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/50 rounded-xl text-sm text-gray-700 dark:text-gray-300 hidden">
+          <div class="flex items-start gap-3">
+            <i data-lucide="info" class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0"></i>
+            <div>
+              <p class="font-semibold text-primary-700 dark:text-primary-300 mb-1" id="infoTitle">Компонент</p>
+              <p id="infoText">Описание</p>
+            </div>
+            <button id="infoClose"
+              class="ml-auto text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 flex-shrink-0"><i
+                data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+
+        <div class="mt-8 anim-fade-up anim-delay-4">
+          <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <i data-lucide="container" class="w-5 h-5 text-primary-500"></i>
+            Схема контейнеризации
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div class="relative group">
+              <div
+                class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-center transition-all duration-200 hover:shadow-md">
+                <div
+                  class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="file-code" class="w-5 h-5 text-gray-600 dark:text-gray-300"></i>
+                </div>
+                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-0.5">Исходный код</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">C# / TypeScript</p>
+              </div>
+              <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
+                <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+                  <path d="M0 8h18M14 2l6 6-6 6" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="relative group">
+              <div
+                class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800/50 text-center transition-all duration-200 hover:shadow-md">
+                <div
+                  class="w-10 h-10 bg-blue-100 dark:bg-blue-800/40 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
+                </div>
+                <p class="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-0.5">Dockerfile</p>
+                <p class="text-xs text-blue-500 dark:text-blue-400">Описание образа</p>
+              </div>
+              <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
+                <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+                  <path d="M0 8h18M14 2l6 6-6 6" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="relative group">
+              <div
+                class="p-3 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800/50 text-center transition-all duration-200 hover:shadow-md">
+                <div
+                  class="w-10 h-10 bg-cyan-100 dark:bg-cyan-800/40 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="package" class="w-5 h-5 text-cyan-600"></i>
+                </div>
+                <p class="text-xs font-semibold text-cyan-700 dark:text-cyan-300 mb-0.5">Docker Image</p>
+                <p class="text-xs text-cyan-500 dark:text-cyan-400">Контейнер</p>
+              </div>
+              <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
+                <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+                  <path d="M0 8h18M14 2l6 6-6 6" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="relative group">
+              <div
+                class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800/50 text-center transition-all duration-200 hover:shadow-md">
+                <div
+                  class="w-10 h-10 bg-purple-100 dark:bg-purple-800/40 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="boxes" class="w-5 h-5 text-purple-600"></i>
+                </div>
+                <p class="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-0.5">K8s Pod</p>
+                <p class="text-xs text-purple-500 dark:text-purple-400">Развёртывание</p>
+              </div>
+              <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
+                <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+                  <path d="M0 8h18M14 2l6 6-6 6" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="relative group">
+              <div
+                class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800/50 text-center transition-all duration-200 hover:shadow-md">
+                <div
+                  class="w-10 h-10 bg-green-100 dark:bg-green-800/40 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                </div>
+                <p class="text-xs font-semibold text-green-700 dark:text-green-300 mb-0.5">Рабочий кластер</p>
+                <p class="text-xs text-green-500 dark:text-green-400">Работа</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 9: Deployment ====== -->
-    <section id="slide-9" class="min-h-screen flex items-center bg-accent-50/50 dark:bg-gray-800" data-speaker-note="Для обеспечения воспроизводимости и масштабируемости система развёрнута в контейнерной среде Docker с оркестрацией Kubernetes. Архитектура включает отдельные деплойменты для backend и frontend.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
+    <!-- ====== SLIDE 8: Results ====== -->
+    <section id="slide-8" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900"
+      data-speaker-note="Результаты экспериментов. Сравнительные характеристики обработки данных показали значительное улучшение производительности. Время полного расчёта сократилось с 27 минут нативной реализации до 18 минут в контейнерах Kubernetes — это снижение на 33%. Потребление оперативной памяти снизилось с 1220 МБ до 1040 МБ — экономия 15%. Точность результатов полностью сохранена: относительное стандартное отклонение RSD составило 1,6% как для нативной, так и для контейнеризованной реализации. Время развёртывания системы в Kubernetes составляет от 5 до 15 минут, что является допустимыми накладными расходами. Результаты показывают, что контейнеризация Docker добавляет небольшие накладные расходы около 9,9% на время развёртывания, но обеспечивает полную воспроизводимость вычислений в любой среде. Реализация алгоритма на C# превосходит Python-аналог в 11,4 раза по скорости при одинаковой точности результатов.">
+      <div class="max-w-5xl mx-auto px-6 w-full py-12">
         <div class="slide-badge mb-6">
-          <i data-lucide="boxes" class="w-3 h-3"></i>
-          <span>Слайд 9 / 16 — Развёртывание</span>
+          <i data-lucide="bar-chart-3" class="w-3 h-3"></i>
+          <span>Слайд 8 / 11 — Результаты</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-accent-700 dark:text-accent-300">
-          Развёртывание инфраструктуры
-        </h2>
-        <div class="card-interactive p-6 bg-white/90 dark:bg-gray-900 rounded-xl shadow-md mb-8">
-          <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            Для обеспечения <strong>воспроизводимости</strong> и <strong>масштабируемости</strong> система развёрнута
-            в контейнерной среде <strong>Docker</strong> [3] с оркестрацией <strong>Kubernetes</strong> [4].
-          </p>
-          <div class="grid md:grid-cols-2 gap-6">
-            <div class="p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg">
-              <h4 class="font-semibold text-blue-700 dark:text-blue-400 mb-2">Backend</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300">ASP.NET Core [5] — отдельный Deployment, Service для сетевого взаимодействия</p>
-            </div>
-            <div class="p-4 bg-purple-50/50 dark:bg-purple-900/20 rounded-lg">
-              <h4 class="font-semibold text-purple-700 dark:text-purple-400 mb-2">Frontend</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300">React — отдельный Deployment, Service для сетевого взаимодействия</p>
-            </div>
+        <h2 class="text-3xl font-bold mb-6 text-primary-700 dark:text-primary-300">Результаты: производительность и
+          точность</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div
+            class="card-interactive p-4 bg-red-50/50 dark:bg-red-900/20 rounded-xl text-center border border-red-200 dark:border-red-800/50">
+            <p class="text-3xl font-bold text-red-600 dark:text-red-400">−33%</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Время обработки</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">27 → 18 мин</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-green-50/50 dark:bg-green-900/20 rounded-xl text-center border border-green-200 dark:border-green-800/50">
+            <p class="text-3xl font-bold text-green-600 dark:text-green-400">−15%</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Потребление ОЗУ</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">1220 → 1040 МБ</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl text-center border border-blue-200 dark:border-blue-800/50">
+            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">11,4×</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">C# vs Python</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">при одинаковой точности</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl text-center border border-amber-200 dark:border-amber-800/50">
+            <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">+9,9%</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Накладные расходы</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Docker-контейнеризация</p>
           </div>
         </div>
-        <div class="pl-4 pr-3 py-3 border-l-4 border-accent-500 bg-accent-50/40 dark:bg-accent-900/30 rounded-r-lg">
-          <p class="text-sm font-medium text-accent-900 dark:text-accent-100">
-            <i data-lucide="info" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
-            Объекты Service обеспечивают сетевое взаимодействие между компонентами платформы.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== SLIDE 10: Results Table ====== -->
-    <section id="slide-10" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Сравнительные характеристики обработки данных: время полного расчёта сократилось с 27 до 18 минут (-33%), RSD остался 1,6%, потребление ОЗУ снизилось с 1220 до 1040 МБ (-15%), время развёртывания системы увеличилось с 0 до 5-15 минут.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
-          <i data-lucide="table" class="w-3 h-3"></i>
-          <span>Слайд 10 / 16 — Результаты</span>
-        </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Сравнительные характеристики обработки данных
-        </h2>
         <div class="overflow-x-auto mb-8">
           <table class="results-table">
             <thead>
@@ -675,315 +1877,343 @@
                 <th>Показатель</th>
                 <th>Нативная реализация</th>
                 <th>Контейнеры в Kubernetes</th>
-                <th>Изменение, %</th>
+                <th>Изменение</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="font-semibold text-gray-700 dark:text-gray-300">Время полного расчёта, мин</td>
-                <td class="text-gray-600 dark:text-gray-400">27</td>
-                <td class="text-gray-600 dark:text-gray-400">18–33</td>
-                <td class="text-red-600 dark:text-red-400 font-bold">−33</td>
+                <td class="font-semibold text-gray-700 dark:text-gray-300">Время полного расчёта</td>
+                <td class="text-gray-600 dark:text-gray-400">27 мин</td>
+                <td class="text-gray-600 dark:text-gray-400">18 мин</td>
+                <td class="text-red-600 dark:text-red-400 font-bold">−33%</td>
               </tr>
               <tr>
-                <td class="font-semibold text-gray-700 dark:text-gray-300">Среднее RSD результатов</td>
+                <td class="font-semibold text-gray-700 dark:text-gray-300">Потребление ОЗУ</td>
+                <td class="text-gray-600 dark:text-gray-400">1220 МБ</td>
+                <td class="text-gray-600 dark:text-gray-400">1040 МБ</td>
+                <td class="text-green-600 dark:text-green-400 font-bold">−15%</td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-gray-700 dark:text-gray-300">Точность (RSD)</td>
                 <td class="text-gray-600 dark:text-gray-400">1,6%</td>
                 <td class="text-gray-600 dark:text-gray-400">1,6%</td>
-                <td class="text-blue-600 dark:text-blue-400 font-bold">0</td>
+                <td class="text-blue-600 dark:text-blue-400 font-bold">0%</td>
               </tr>
               <tr>
-                <td class="font-semibold text-gray-700 dark:text-gray-300">Потребление ОЗУ, МБ</td>
-                <td class="text-gray-600 dark:text-gray-400">1220</td>
-                <td class="text-gray-600 dark:text-gray-400">1040</td>
-                <td class="text-green-600 dark:text-green-400 font-bold">−15</td>
-              </tr>
-              <tr>
-                <td class="font-semibold text-gray-700 dark:text-gray-300">Время развёртывания, мин</td>
-                <td class="text-gray-600 dark:text-gray-400">0</td>
-                <td class="text-gray-600 dark:text-gray-400">5–15</td>
-                <td class="text-amber-600 dark:text-amber-400 font-bold">+9,9</td>
+                <td class="font-semibold text-gray-700 dark:text-gray-300">Время развёртывания</td>
+                <td class="text-gray-600 dark:text-gray-400">0 мин</td>
+                <td class="text-gray-600 dark:text-gray-400">5–15 мин</td>
+                <td class="text-amber-600 dark:text-amber-400 font-bold">+9,9%</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="grid md:grid-cols-4 gap-4">
-          <div class="card-interactive p-4 bg-red-50/50 dark:bg-red-900/20 rounded-xl text-center border border-red-200 dark:border-red-800/50">
-            <p class="text-3xl font-bold text-red-600 dark:text-red-400">−33%</p>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Время расчёта</p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div
+            class="card-interactive p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
+            <div class="flex items-center gap-2 mb-2"><i data-lucide="circle-check" class="w-5 h-5 text-green-600"></i>
+              <h4 class="font-semibold text-green-700 dark:text-green-400 text-sm">Точность сохранена</h4>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-400">RSD = 1,6% идентично нативной реализации —
+              контейнеризация не влияет на научную достоверность</p>
           </div>
-          <div class="card-interactive p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl text-center border border-blue-200 dark:border-blue-800/50">
-            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">0%</p>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">RSD (точность)</p>
+          <div
+            class="card-interactive p-5 bg-purple-50/50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800/50">
+            <div class="flex items-center gap-2 mb-2"><i data-lucide="zap" class="w-5 h-5 text-purple-600"></i>
+              <h4 class="font-semibold text-purple-700 dark:text-purple-400 text-sm">C# превосходит Python</h4>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Реализация на C# в 11,4 раза быстрее при одинаковой
+              точности результатов</p>
           </div>
-          <div class="card-interactive p-4 bg-green-50/50 dark:bg-green-900/20 rounded-xl text-center border border-green-200 dark:border-green-800/50">
-            <p class="text-3xl font-bold text-green-600 dark:text-green-400">−15%</p>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Потребление ОЗУ</p>
-          </div>
-          <div class="card-interactive p-4 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl text-center border border-amber-200 dark:border-amber-800/50">
-            <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">+9,9%</p>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Накладные расходы</p>
+          <div
+            class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
+            <div class="flex items-center gap-2 mb-2"><i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+              <h4 class="font-semibold text-blue-700 dark:text-blue-400 text-sm">Воспроизводимость</h4>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Контейнеризация Docker обеспечивает воспроизводимость
+              вычислений в любой среде</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 11: Speed ====== -->
-    <section id="slide-11" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800" data-speaker-note="Время полного расчёта сократилось с 27 минут до 18-33 минут. Это даёт экономию до 33% времени при сохранении точности результатов.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
+    <!-- ====== SLIDE 9: Comparison ====== -->
+    <section id="slide-9" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800"
+      data-speaker-note="Анализ и сравнение с существующими платформами. Мы рассмотрели четыре аналогичных решения. Первое — PhenoMeNal: продвинутое облачное решение для анализа метаболомных данных, построенное на Kubernetes и Docker, с поддержкой Galaxy, Jupyter, Luigi и Pachyderm. Второе — KubePipe: высокоуровневый инструмент параллелизации машинного обучения в Kubernetes, абстрагирующий контейнеризацию от пользователя. Третье — AI-агенты ORNL: модульная архитектура автономных экспериментов на HPC-установках Окриджа с использованием LLM и мультиагентного фреймворка. Четвёртое — Swiss Cat+: инфраструктура FAIR-данных с Kubernetes, Argo Workflows и RDF-графами. Наша платформа отличается от всех них: мы используем полиэдральный метод параметризованного приближения Нелдера-Мида, стек на ASP.NET Core и React с разделением ответственности между backend и frontend, эмпирическое подтверждение эффективности — 33% сокращение времени и 15% снижение ОЗУ, реализация на C# даёт выигрыш в 11,4 раза по сравнению с Python, и платформа предназначена для межлабораторных сличительных испытаний.">
+      <div class="max-w-5xl mx-auto px-6 w-full py-12">
         <div class="slide-badge mb-6">
-          <i data-lucide="zap" class="w-3 h-3"></i>
-          <span>Слайд 11 / 16 — Скорость</span>
+          <i data-lucide="compass" class="w-3 h-3"></i>
+          <span>Слайд 9 / 11 — Сравнение</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Сокращение времени обработки
-        </h2>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="card-interactive p-6 bg-white/90 dark:bg-gray-900 rounded-xl shadow-md text-center">
-            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="clock" class="w-8 h-8 text-gray-600"></i>
-            </div>
-            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-1">Нативная реализация</h3>
-            <p class="text-3xl font-bold text-gray-600">27 мин</p>
-            <p class="text-xs text-gray-500 mt-1">базовый показатель</p>
-          </div>
-          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-primary-900/20 rounded-xl shadow-md text-center border-2 border-primary-300 dark:border-primary-600">
-            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="container" class="w-8 h-8 text-primary-600"></i>
-            </div>
-            <h3 class="font-semibold text-primary-700 dark:text-primary-300 mb-1">Контейнеры K8s</h3>
-            <p class="text-3xl font-bold text-primary-600 dark:text-primary-400">18 мин</p>
-            <p class="text-xs text-primary-500 mt-1">минимальное время</p>
-          </div>
-          <div class="card-interactive p-6 bg-green-50/50 dark:bg-green-900/20 rounded-xl shadow-md text-center border-2 border-green-300 dark:border-green-600">
-            <div class="w-16 h-16 bg-green-100 dark:bg-green-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="trending-down" class="w-8 h-8 text-green-600"></i>
-            </div>
-            <h3 class="font-semibold text-green-700 dark:text-green-400 mb-1">Экономия</h3>
-            <p class="text-3xl font-bold text-green-600 dark:text-green-400">−33%</p>
-            <p class="text-xs text-green-500 mt-1">время обработки</p>
-          </div>
-        </div>
-      </div>
-    </section>
+        <h2 class="text-3xl font-bold mb-4 text-primary-700 dark:text-primary-300">Анализ: сравнение с существующими
+          платформами</h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-8 text-sm">Нажмите на карточку для подробного описания</p>
 
-    <!-- ====== SLIDE 12: RAM ====== -->
-    <section id="slide-12" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Потребление оперативной памяти снизилось с 1220 МБ до 1040 МБ, что составляет экономию 15%. Накладные расходы Docker составляют +9,9% на время развёртывания системы.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
-          <i data-lucide="memory-stick" class="w-3 h-3"></i>
-          <span>Слайд 12 / 16 — Ресурсы</span>
-        </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Оптимизация использования ресурсов
-        </h2>
-        <div class="grid md:grid-cols-2 gap-8 items-start mb-8">
-          <div class="space-y-5">
-            <div class="card-interactive p-5 bg-red-50/50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
-              <h3 class="font-semibold text-red-700 dark:text-red-400 mb-2">До оптимизации</h3>
-              <p class="text-3xl font-bold text-red-600">1220 МБ</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">потребление ОЗУ</p>
+        <div class="grid md:grid-cols-2 gap-5 mb-8">
+          <!-- PhenoMeNal -->
+          <div class="related-card" data-modal-title="PhenoMeNal — облачная платформа для метаболомики"
+            data-modal-desc="PhenoMeNal (Phenome and Metabolome aNalysis) — продвинутое и полное решение для развёртывания инфраструктуры как услуги (IaaS), которое переносит ориентированные на рабочие процессы, совместимые платформы анализа метаболомных данных в облако. Проект бесшовно интегрирует широкий спектр существующих инструментов с открытым исходным кодом, протестированных и упакованных в виде Docker-контейнеров через процесс непрерывной интеграции проекта, и развёрнутых на основе фреймворка оркестрации Kubernetes. Он также предоставляет ряд стандартизированных, автоматизированных и опубликованных рабочих процессов анализа в пользовательских интерфейсах Galaxy, Jupyter, Luigi и Pachyderm."
+            data-modal-source="PubMed, 2019" data-modal-url="https://pubmed.ncbi.nlm.nih.gov/30535405/">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="tag bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">Метабономика</span>
+              <span class="text-xs text-gray-400">PubMed, 2019</span>
             </div>
-            <div class="card-interactive p-5 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
-              <h3 class="font-semibold text-green-700 dark:text-green-400 mb-2">После оптимизации</h3>
-              <p class="text-3xl font-bold text-green-600">1040 МБ</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">потребление ОЗУ</p>
+            <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-1">PhenoMeNal</h4>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Облачная IaaS-инфраструктура для анализа
+              метаболомных данных. Интегрирует Galaxy, Jupyter, Luigi, Pachyderm. Оркестрация через Kubernetes и Docker
+              обеспечивает модульность и воспроизводимость пайплайнов.</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="keyword-tag text-xs" style="font-size:10px">Kubernetes</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">Docker</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">Galaxy</span>
             </div>
           </div>
-          <div class="flex items-center justify-center">
-            <img
-              src="https://image.qwenlm.ai/public_source/25a2319a-5eed-4727-8576-6334beb173a9/133baaa6b-15f1-4555-b5b9-21b62d00f0e6.png"
-              alt="Оптимизация ОЗУ"
-              class="w-full max-w-md rounded-xl shadow-lg" />
-          </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="card-interactive p-5 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
-            <h3 class="font-semibold text-amber-700 dark:text-amber-400 mb-2">Накладные расходы Docker</h3>
-            <p class="text-2xl font-bold text-amber-600">+9,9%</p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">время развёртывания: 0 → 5–15 мин</p>
-          </div>
-          <div class="card-interactive p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50">
-            <h3 class="font-semibold text-blue-700 dark:text-blue-400 mb-2">Экономия ОЗУ</h3>
-            <p class="text-2xl font-bold text-blue-600">−15%</p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">1220 МБ → 1040 МБ</p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- ====== SLIDE 13: Accuracy ====== -->
-    <section id="slide-13" class="min-h-screen flex items-center bg-accent-50/50 dark:bg-gray-800" data-speaker-note="Точность результатов не изменилась: RSD остался 1,6% как в нативной реализации, так и в контейнерах. Это подтверждает, что контейнеризация не влияет на точность вычислений.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
-          <i data-lucide="shield-check" class="w-3 h-3"></i>
-          <span>Слайд 13 / 16 — Точность</span>
-        </div>
-        <h2 class="text-3xl font-bold mb-8 text-accent-700 dark:text-accent-300">
-          Гарантии научной достоверности
-        </h2>
-        <div class="grid md:grid-cols-3 gap-6 mb-8">
-          <div class="card-interactive p-6 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50 text-center">
-            <div class="w-14 h-14 bg-green-100 dark:bg-green-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl">✅</span>
+          <!-- KubePipe -->
+          <div class="related-card" data-modal-title="KubePipe — параллелизация ML-пайплайнов"
+            data-modal-desc="KubePipe — высокоуровневый инструмент, который абстрагирует параллелизм и контейнеризацию от пользователя, позволяя неэкспертам использовать передовые параллельные архитектуры без глубоких знаний параллельных вычислений или оркестрации контейнеров. KubePipe обеспечивает одновременное выполнение нескольких рабочих процессов машинного обучения в кластере Kubernetes, оптимизируя вычислительные ресурсы и значительно сокращая время обучения. Используя контейнеризованные среды, KubePipe обеспечивает высокую степень модульности, масштабируемости и переносимости."
+            data-modal-source="Springer, 2025"
+            data-modal-url="https://link.springer.com/article/10.1007/s11227-025-06956-x">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="tag bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">ML
+                Pipelines</span>
+              <span class="text-xs text-gray-400">Springer, 2025</span>
             </div>
-            <h3 class="font-semibold text-green-700 dark:text-green-400 mb-2">Точность</h3>
-            <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">RSD (Relative Standard Deviation)</p>
-            <div class="text-3xl font-bold text-green-600 dark:text-green-400">1,6%</div>
-            <p class="text-xs text-gray-500 mt-2">идентично нативной реализации</p>
-          </div>
-          <div class="card-interactive p-6 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800/50 text-center">
-            <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl">⚡</span>
+            <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-1">KubePipe</h4>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Высокоуровневый инструмент параллелизации
+              ML-пайплайнов в Kubernetes. Абстрагирует контейнеризацию от пользователя, позволяя запускать параллельные
+              обучающие конвейеры без глубоких знаний оркестрации.</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="keyword-tag text-xs" style="font-size:10px">Kubernetes</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">ML</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">Параллелизм</span>
             </div>
-            <h3 class="font-semibold text-blue-700 dark:text-blue-400 mb-2">Производительность C#</h3>
-            <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Реализация на C# vs Python</p>
-            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">11,4×</div>
-            <p class="text-xs text-gray-500 mt-2">быстрее при одинаковой точности</p>
           </div>
-          <div class="card-interactive p-6 bg-purple-50/50 dark:bg-purple-900/20 rounded-xl border border-purple-200 dark:border-purple-800/50 text-center">
-            <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl">📦</span>
-            </div>
-            <h3 class="font-semibold text-purple-700 dark:text-purple-400 mb-2">Воспроизводимость</h3>
-            <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Контейнеризация Docker</p>
-            <p class="text-xs text-gray-500 mt-2">Исключение фактора «разного окружения»</p>
-          </div>
-        </div>
-        <div class="pl-4 pr-3 py-3 border-l-4 border-green-500 bg-green-50/40 dark:bg-green-900/30 rounded-r-lg">
-          <p class="text-sm font-medium text-green-900 dark:text-green-100">
-            <i data-lucide="circle-check" class="inline-block w-4 h-4 mr-1.5 -mt-0.5"></i>
-            Контейнеризация Docker добавляет небольшие накладные расходы (+9,9%), но обеспечивает
-            <strong>воспроизводимость</strong> без потери точности.
-          </p>
-        </div>
-      </div>
-    </section>
 
-    <!-- ====== SLIDE 14: Analysis ====== -->
-    <section id="slide-14" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900" data-speaker-note="Результаты показывают, что контейнеризация Docker добавляет небольшие накладные расходы (+9,9%), но обеспечивает воспроизводимость. В ходе работы разработана и внедрена программная платформа для обработки экспериментальных данных.">
-      <div class="max-w-5xl mx-auto px-6 w-full py-16">
-        <div class="slide-badge mb-6">
-          <i data-lucide="bar-chart-3" class="w-3 h-3"></i>
-          <span>Слайд 14 / 16 — Анализ</span>
+          <!-- ORNL AI Agents -->
+          <div class="related-card" data-modal-title="AI Agents ORNL — автономные эксперименты"
+            data-modal-desc="Модульная архитектура для обеспечения автономных межобъектных научных экспериментов с использованием AI-агентов в HPC и производственных объектах пользователей Окриджской национальной лаборатории (ORNL). Предложенная система интегрирует интерфейс на естественном языке на основе LLM, мультиагентный фреймворк для принятия решений, программируемые API объектов и инфраструктуру, учитывающую происхождение данных, для поддержки адаптивных, объяснимых и воспроизводимых рабочих процессов. AI-агенты координируют и оптимизируют эксперименты аддитивного производства через координацию в реальном времени между экспериментальными и HPC-ресурсами."
+            data-modal-source="ACM, 2024" data-modal-url="https://dl.acm.org/doi/10.1145/3731599.3767592">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="tag bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">AI-агенты</span>
+              <span class="text-xs text-gray-400">ACM, 2024</span>
+            </div>
+            <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-1">ORNL AI Agents</h4>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Модульная архитектура автономных экспериментов на
+              HPC-установках Окриджской национальной лаборатории. LLM-интерфейс и мультиагентный фреймворк координируют
+              аддитивное производство и вычислительные ресурсы.</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="keyword-tag text-xs" style="font-size:10px">LLM</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">Мультиагенты</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">HPC</span>
+            </div>
+          </div>
+
+          <!-- Swiss Cat+ -->
+          <div class="related-card" data-modal-title="Swiss Cat+ — FAIR-инфраструктура цифровой химии"
+            data-modal-desc="Специализированная инфраструктура исследовательских данных (RDI), разработанная в рамках проекта Swiss Cat+, интегрирует автоматизированный синтез, многоэтапную аналитику и семантическое моделирование. Система фиксирует каждый экспериментальный шаг в структурированном, машиночитаемом формате, формируя масштабируемую и совместимую основу данных. Построена на Kubernetes и Argo Workflows, выровнена с принципами FAIR. RDI преобразует экспериментальные метаданные в проверенные RDF-графы с использованием онтологической семантической модели. Ключевые особенности включают модульный RDF-конвертер и файлы «Матрёшка», которые инкапсулируют полные эксперименты с сырыми данными и метаданными в портативном стандартизированном ZIP-формате."
+            data-modal-source="ScienceDirect, 2025"
+            data-modal-url="https://www.sciencedirect.com/org/science/article/pii/S2635098X25002426">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="tag bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Цифровая
+                химия</span>
+              <span class="text-xs text-gray-400">ScienceDirect, 2025</span>
+            </div>
+            <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-1">Swiss Cat+ RDI</h4>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">FAIR-инфраструктура исследовательских данных.
+              Kubernetes + Argo Workflows, RDF-графы, «Matryoshka files» для инкапсуляции экспериментов. Обеспечивает
+              воспроизводимость и совместное использование данных.</p>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="keyword-tag text-xs" style="font-size:10px">Kubernetes</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">Argo</span>
+              <span class="keyword-tag text-xs" style="font-size:10px">FAIR</span>
+            </div>
+          </div>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Анализ результатов
-        </h2>
-        <div class="grid md:grid-cols-2 gap-6 mb-8">
-          <div class="card-interactive p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-            <h3 class="font-semibold text-primary-700 dark:text-primary-300 mb-3">Ключевые выводы</h3>
-            <ul class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-              <li class="flex items-start gap-2">
-                <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
-                <span>Контейнеризация Docker обеспечивает воспроизводимость вычислений</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
-                <span>Оркестрация в Kubernetes обеспечивает масштабируемость и координацию</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
-                <span>Реализация на C# превосходит Python-аналог в 11,4 раза по скорости</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
-                <span>Точность результатов сохранена (RSD = 1,6%)</span>
-              </li>
+
+        <!-- Our platform positioning -->
+        <div
+          class="card-interactive p-6 bg-primary-50/50 dark:bg-primary-900/20 rounded-xl border-2 border-primary-300 dark:border-primary-700">
+          <h3 class="font-semibold text-primary-700 dark:text-primary-300 mb-3 flex items-center gap-2">
+            <i data-lucide="target" class="w-5 h-5"></i>
+            Наша платформа: ключевые отличия
+          </h3>
+          <div class="grid md:grid-cols-2 gap-4">
+            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span><strong>Полиэдральный метод</strong>
+                  параметризованного приближения (Нелдера — Мида)</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Backend на <strong>ASP.NET
+                    Core</strong>, SPA-frontend на <strong>React</strong></span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Эмпирическое подтверждение:
+                  <strong>−33%</strong> времени, <strong>−15%</strong> ОЗУ</span></li>
+            </ul>
+            <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span><strong>Реализация на C#</strong> — в
+                  11,4 раза быстрее Python-аналогов</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Контейнеризация обеспечивает
+                  <strong>воспроизводимость</strong> в любой среде</span></li>
+              <li class="flex items-start gap-2"><i data-lucide="check"
+                  class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i><span>Межлабораторные <strong>сличительные
+                    испытания</strong></span></li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 15: References ====== -->
-    <section id="slide-15" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800" data-speaker-note="Список использованных источников включает работы Нелдера и Мида (1965), Химмелблау (1972), документацию Docker, Kubernetes и ASP.NET Core.">
+    <!-- ====== SLIDE 10: References ====== -->
+    <section id="slide-10" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900"
+      data-speaker-note="Список использованных источников. Первый источник — классическая работа Нелдера и Мида 1965 года «Симплекс-метод для минимизации функций» в журнале The Computer Journal. Это фундаментальная публикация, описывающая алгоритм деформируемого многогранника. Второй источник — книга Химмельблау «Прикладное нелинейное программирование» 1972 года издательства McGraw-Hill, содержащая теоретические основы оптимизации. Третий и четвёртый источники — официальная документация Docker и Kubernetes, которые мы использовали при проектировании архитектуры контейнеризации и оркестрации. Пятый источник — документация ASP.NET Core от Microsoft, описывающая возможности высокопроизводительного кроссплатформенного фреймворка для создания backend-сервисов.">
       <div class="max-w-5xl mx-auto px-6 w-full py-16">
         <div class="slide-badge mb-6">
           <i data-lucide="list" class="w-3 h-3"></i>
-          <span>Слайд 15 / 16 — Источники</span>
+          <span>Слайд 10 / 11 — Источники</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Список использованных источников
-        </h2>
-        <ol class="ref-list space-y-4 mb-8">
-          <li class="card-interactive p-4 bg-white/90 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-            <span class="font-semibold text-primary-600 dark:text-primary-400">[1]</span>
-            Nelder, J. A. A simplex method for function minimization / J. A. Nelder, R. Mead //
-            The Computer Journal. — 1965. — Т. 7, № 4. — С. 308–313.
-          </li>
-          <li class="card-interactive p-4 bg-white/90 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-            <span class="font-semibold text-primary-600 dark:text-primary-400">[2]</span>
-            Himmelblau, D. M. Applied Nonlinear Programming / D. M. Himmelblau. — New York: McGraw-Hill, 1972. — 498 с.
-          </li>
-          <li class="card-interactive p-4 bg-white/90 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-            <span class="font-semibold text-primary-600 dark:text-primary-400">[3]</span>
-            Docker Documentation. Build, ship, and run any app, anywhere. — URL:
-            <a href="https://docs.docker.com" class="text-primary-600 dark:text-primary-400 underline">https://docs.docker.com</a>
-            (дата обращения: 15.02.2026).
-          </li>
-          <li class="card-interactive p-4 bg-white/90 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-            <span class="font-semibold text-primary-600 dark:text-primary-400">[4]</span>
-            Cloud Native Computing Foundation. Kubernetes: Production-Grade Container Orchestration. — URL:
-            <a href="https://kubernetes.io" class="text-primary-600 dark:text-primary-400 underline">https://kubernetes.io</a>
-            (дата обращения: 15.02.2026).
-          </li>
-          <li class="card-interactive p-4 bg-white/90 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
-            <span class="font-semibold text-primary-600 dark:text-primary-400">[5]</span>
-            Microsoft. ASP.NET Core — высокопроизводительный кроссплатформенный фреймворк. — URL:
-            <a href="https://dotnet.microsoft.com/apps/aspnet" class="text-primary-600 dark:text-primary-400 underline">https://dotnet.microsoft.com/apps/aspnet</a>
-            (дата обращения: 15.02.2026).
-          </li>
-        </ol>
-        <div class="grid md:grid-cols-5 gap-4">
-          <div class="card-interactive p-3 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 mb-1">[1] Nelder, Mead</p>
-            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Simplex method</p>
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Список использованных источников</h2>
+
+        <div class="space-y-4 mb-10">
+          <div class="ref-card">
+            <div class="flex items-start gap-0">
+              <span class="ref-num mt-0.5">1</span>
+              <div>
+                <p class="ref-title text-gray-800 dark:text-gray-200">A simplex method for function minimization</p>
+                <p class="ref-detail mt-1">Nelder, J. A., Mead, R. // The Computer Journal. — 1965. — Vol. 7, № 4. — P.
+                  308–313.</p>
+              </div>
+            </div>
           </div>
-          <div class="card-interactive p-3 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 mb-1">[2] Himmelblau</p>
-            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Nonlinear Programming</p>
+
+          <div class="ref-card" style="border-left-color: #8b5cf6;">
+            <div class="flex items-start gap-0">
+              <span class="ref-num mt-0.5" style="background: #8b5cf6;">2</span>
+              <div>
+                <p class="ref-title text-gray-800 dark:text-gray-200">Applied Nonlinear Programming</p>
+                <p class="ref-detail mt-1">Himmelblau, D. M. — New York: McGraw-Hill, 1972. — 498 p.</p>
+              </div>
+            </div>
           </div>
-          <div class="card-interactive p-3 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 mb-1">[3] Docker</p>
-            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Containerization</p>
+
+          <div class="ref-card" style="border-left-color: #06b6d4;">
+            <div class="flex items-start gap-0">
+              <span class="ref-num mt-0.5" style="background: #06b6d4;">3</span>
+              <div>
+                <p class="ref-title text-gray-800 dark:text-gray-200">Docker Documentation — Build, ship, and run any
+                  app, anywhere</p>
+                <p class="ref-detail mt-1">URL: <a href="https://docs.docker.com"
+                    class="text-primary-600 dark:text-primary-400 underline">https://docs.docker.com</a> (дата
+                  обращения: 15.02.2026).</p>
+              </div>
+            </div>
           </div>
-          <div class="card-interactive p-3 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 mb-1">[4] Kubernetes</p>
-            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Orchestration</p>
+
+          <div class="ref-card" style="border-left-color: #326ce5;">
+            <div class="flex items-start gap-0">
+              <span class="ref-num mt-0.5" style="background: #326ce5;">4</span>
+              <div>
+                <p class="ref-title text-gray-800 dark:text-gray-200">Kubernetes: Production-Grade Container
+                  Orchestration</p>
+                <p class="ref-detail mt-1">Cloud Native Computing Foundation. URL: <a href="https://kubernetes.io"
+                    class="text-primary-600 dark:text-primary-400 underline">https://kubernetes.io</a> (дата обращения:
+                  15.02.2026).</p>
+              </div>
+            </div>
           </div>
-          <div class="card-interactive p-3 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
-            <p class="text-xs text-gray-500 mb-1">[5] ASP.NET Core</p>
-            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Framework</p>
+
+          <div class="ref-card" style="border-left-color: #a855f7;">
+            <div class="flex items-start gap-0">
+              <span class="ref-num mt-0.5" style="background: #a855f7;">5</span>
+              <div>
+                <p class="ref-title text-gray-800 dark:text-gray-200">ASP.NET Core — высокопроизводительный
+                  кроссплатформенный фреймворк</p>
+                <p class="ref-detail mt-1">Microsoft. URL: <a href="https://dotnet.microsoft.com/apps/aspnet"
+                    class="text-primary-600 dark:text-primary-400 underline">https://dotnet.microsoft.com/apps/aspnet</a>
+                  (дата обращения: 15.02.2026).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-5 gap-3">
+          <div
+            class="card-interactive p-4 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
+            <div
+              class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+              <i data-lucide="triangle" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <p class="text-xs text-gray-500 mb-0.5">[1] Nelder, Mead</p>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Simplex method</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
+            <div
+              class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+              <i data-lucide="function-square" class="w-5 h-5 text-purple-600"></i>
+            </div>
+            <p class="text-xs text-gray-500 mb-0.5">[2] Himmelblau</p>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Nonlinear Programming</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
+            <div
+              class="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+              <i data-lucide="container" class="w-5 h-5 text-cyan-600"></i>
+            </div>
+            <p class="text-xs text-gray-500 mb-0.5">[3] Docker</p>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Containerization</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
+            <div
+              class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+              <i data-lucide="boxes" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <p class="text-xs text-gray-500 mb-0.5">[4] Kubernetes</p>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Orchestration</p>
+          </div>
+          <div
+            class="card-interactive p-4 bg-white/80 dark:bg-gray-900 rounded-xl text-center border border-gray-200 dark:border-gray-700">
+            <div
+              class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-2">
+              <i data-lucide="code-2" class="w-5 h-5 text-purple-600"></i>
+            </div>
+            <p class="text-xs text-gray-500 mb-0.5">[5] ASP.NET Core</p>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Framework</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== SLIDE 16: Conclusion ====== -->
-    <section id="slide-16" class="min-h-screen flex items-center bg-white/80 dark:bg-gray-900">
+    <!-- ====== SLIDE 11: Conclusion ====== -->
+    <section id="slide-11" class="min-h-screen flex items-center bg-primary-50/50 dark:bg-gray-800"
+      data-speaker-note="Заключение. В ходе работы разработана и внедрена программная платформа для обработки экспериментальных данных с использованием полиэдрального метода поиска минимума целевой функции. Реализовано три ключевых компонента: метод параметризованного приближения Нелдера-Мида на C#, архитектура на базе ASP.NET Core и React с контейнеризацией Docker, оркестрация вычислительных процессов в распределённой среде Kubernetes. Экспериментальные результаты подтвердили эффективность платформы: время обработки данных сократилось на 33%, потребление оперативной памяти снизилось на 15%, реализация на C# превосходит Python-аналог в 11,4 раза при одинаковой точности результатов — RSD 1,6%. Платформа готова к применению в межлабораторных сличительных испытаниях и обеспечивает воспроизводимость вычислений в любой среде. Спасибо за внимание! Готов ответить на ваши вопросы.">
       <div class="max-w-5xl mx-auto px-6 w-full py-16">
         <div class="slide-badge mb-6">
           <i data-lucide="check-circle" class="w-3 h-3"></i>
-          <span>Слайд 16 / 16 — Заключение</span>
+          <span>Слайд 11 / 11 — Заключение</span>
         </div>
-        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">
-          Заключение
-        </h2>
-        <div class="bg-primary-50/50 dark:bg-primary-900/20 rounded-xl p-8 border border-primary-200 dark:border-primary-800/50 mb-8">
+        <h2 class="text-3xl font-bold mb-8 text-primary-700 dark:text-primary-300">Заключение</h2>
+        <div
+          class="bg-primary-50/50 dark:bg-primary-900/20 rounded-xl p-8 border border-primary-200 dark:border-primary-800/50 mb-8">
           <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             В ходе работы разработана и внедрена программная платформа для обработки экспериментальных данных
             с использованием <strong>полиэдрального метода</strong> поиска минимума целевой функции.
           </p>
         </div>
         <div class="grid md:grid-cols-2 gap-6 mb-8">
-          <div class="card-interactive p-6 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
+          <div
+            class="card-interactive p-6 bg-green-50/50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800/50">
             <h3 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-4 flex items-center gap-2">
               <i data-lucide="check-circle" class="w-5 h-5"></i> Реализовано
             </h3>
             <ul class="space-y-3">
               <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                 <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
-                <span>Полиэдральный метод (Нелдера — Мида) на C#</span>
+                <span>Метод параметризованного приближения (Нелдера — Мида) на C#</span>
               </li>
               <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                 <i data-lucide="check" class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i>
@@ -995,14 +2225,15 @@
               </li>
             </ul>
           </div>
-          <div class="card-interactive p-6 bg-primary-50/50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-800/50">
+          <div
+            class="card-interactive p-6 bg-primary-50/50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-800/50">
             <h3 class="text-lg font-semibold text-primary-700 dark:text-primary-300 mb-4 flex items-center gap-2">
               <i data-lucide="trending-up" class="w-5 h-5"></i> Результаты
             </h3>
             <div class="space-y-3">
               <div class="flex items-center justify-between p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
                 <span class="text-sm text-gray-700 dark:text-gray-300">Время обработки</span>
-                <span class="text-lg font-bold text-green-600">−33%</span>
+                <span class="text-lg font-bold text-yellow-600">−33%</span>
               </div>
               <div class="flex items-center justify-between p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
                 <span class="text-sm text-gray-700 dark:text-gray-300">Потребление ОЗУ</span>
@@ -1019,36 +2250,43 @@
             </div>
           </div>
         </div>
-        <div class="text-center py-8">
+        <div class="text-center py-6">
           <p class="text-2xl font-bold text-primary-700 dark:text-primary-300 mb-2">Спасибо за внимание!</p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Пишите свои предложения, пожелания, угрозы</p>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="bg-primary-900 dark:bg-gray-950 text-white py-10">
+  <footer class="bg-primary-900 dark:bg-gray-950 text-white py-8">
     <div class="max-w-5xl mx-auto px-6">
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid md:grid-cols-3 gap-6">
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-primary-300">О проекте</h3>
-          <p class="text-sm text-gray-300 leading-relaxed">Оркестрация обработки экспериментальных данных в распределённой среде Kubernetes для автоматизации научных конвейеров.</p>
+          <h3 class="text-sm font-semibold mb-3 text-primary-300 uppercase tracking-wider">О проекте</h3>
+          <p class="text-xs text-gray-300 leading-relaxed">Оркестрация обработки экспериментальных данных в
+            распределённой среде Kubernetes для автоматизации научных конвейеров.</p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-primary-300">Ключевые технологии</h3>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 text-primary-400"></i>Kubernetes & Docker</li>
-            <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 text-primary-400"></i>ASP.NET Core</li>
-            <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 text-primary-400"></i>React SPA</li>
-            <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 text-primary-400"></i>Полиэдральный метод</li>
+          <h3 class="text-sm font-semibold mb-3 text-primary-300 uppercase tracking-wider">Технологии</h3>
+          <ul class="space-y-1.5 text-xs text-gray-300">
+            <li class="flex items-center gap-1.5"><i data-lucide="chevron-right"
+                class="w-3 h-3 text-primary-400"></i>Kubernetes & Docker</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="chevron-right"
+                class="w-3 h-3 text-primary-400"></i>ASP.NET Core</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="chevron-right"
+                class="w-3 h-3 text-primary-400"></i>React SPA</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="chevron-right"
+                class="w-3 h-3 text-primary-400"></i>Метод параметризованного приближения</li>
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-primary-300">Контакты</h3>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li class="flex items-center"><i data-lucide="mail" class="w-4 h-4 mr-2 text-primary-400"></i>viktorkomlev2020@mail.ru</li>
-            <li class="flex items-center"><i data-lucide="github" class="w-4 h-4 mr-2 text-primary-400"></i>v-diti-mephi.github.io/Presentation/</li>
-            <!-- <li class="flex items-center"><i data-lucide="book-open" class="w-4 h-4 mr-2 text-primary-400"></i>Документация API</li> -->
+          <h3 class="text-sm font-semibold mb-3 text-primary-300 uppercase tracking-wider">Контакты</h3>
+          <ul class="space-y-1.5 text-xs text-gray-300">
+            <li class="flex items-center gap-1.5"><i data-lucide="mail"
+                class="w-3 h-3 text-primary-400"></i>viktorkomlev2020@mail.ru</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="github"
+                class="w-3 h-3 text-primary-400"></i>v-diti-mephi.github.io/Presentation/</li>
           </ul>
         </div>
       </div>
@@ -1071,6 +2309,7 @@
           }
         });
       }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
       document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
 
       const progressBar = document.getElementById('progressBar');
@@ -1098,8 +2337,74 @@
       const isDark = document.body.classList.contains('dark');
       document.getElementById('sunIcon')?.classList.toggle('hidden', isDark);
       document.getElementById('moonIcon')?.classList.toggle('hidden', !isDark);
+
+      const infoPanel = document.getElementById('infoPanel');
+      const infoTitle = document.getElementById('infoTitle');
+      const infoText = document.getElementById('infoText');
+      const infoClose = document.getElementById('infoClose');
+
+      function showInfoPanel(title, text) {
+        infoTitle.textContent = title;
+        infoText.textContent = text;
+        infoPanel.classList.remove('hidden');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      function hideInfoPanel() {
+        infoPanel.classList.add('hidden');
+      }
+
+      document.querySelectorAll('[data-info]').forEach(el => {
+        el.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const info = this.getAttribute('data-info');
+          const label = this.textContent.trim().split('\n')[0].trim();
+          showInfoPanel(label, info);
+        });
+      });
+
+      infoClose?.addEventListener('click', hideInfoPanel);
+      document.addEventListener('click', function (e) {
+        if (!infoPanel.contains(e.target) && !e.target.closest('[data-info]')) {
+          hideInfoPanel();
+        }
+      });
+
+      // Slide 9 modal functionality
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const accentColors = {
+        'PhenoMeNal': 'bg-cyan-500',
+        'KubePipe': 'bg-purple-500',
+        'ORNL AI Agents': 'bg-amber-500',
+        'Swiss Cat+ RDI': 'bg-green-500'
+      };
+
+      document.querySelectorAll('.related-card[data-modal-title]').forEach(card => {
+        card.addEventListener('click', function () {
+          const title = this.dataset.modalTitle;
+          const desc = this.dataset.modalDesc;
+          const source = this.dataset.modalSource;
+          const url = this.dataset.modalUrl;
+          const colorKey = title.split(' — ')[0];
+          const accentColor = accentColors[colorKey] || 'bg-blue-500';
+          if (window.presentationController) {
+            window.presentationController.openModal(title, desc, source, url, accentColor);
+          }
+        });
+      });
+
+      modalCloseBtn?.addEventListener('click', function () {
+        if (window.presentationController) window.presentationController.closeModal();
+      });
+
+      modalOverlay?.addEventListener('click', function (e) {
+        if (e.target === modalOverlay) {
+          if (window.presentationController) window.presentationController.closeModal();
+        }
+      });
     });
   </script>
 </body>
-</html>
 
+</html>
